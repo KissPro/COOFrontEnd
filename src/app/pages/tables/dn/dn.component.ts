@@ -15,11 +15,12 @@ import { DNService } from 'app/@core/service/dn.service';
 export class DNComponent implements OnInit {
   dtOptions: DataTables.Settings = {};
   dns: DNModel[];
+  indexTable: number;
 
   constructor(private http: HttpClient,
     private dnService: DNService,
     private sidebarService: NbSidebarService,
-    private layoutService: LayoutService) {}
+    private layoutService: LayoutService) { }
 
   ngOnInit(): void {
     const that = this;
@@ -31,10 +32,15 @@ export class DNComponent implements OnInit {
       pageLength: 10,
       serverSide: true,
       processing: true,
+      scrollX: true,
+      scrollY: '55vh',
+      order: [1, 'asc'],
+
       ajax: (dataTablesParameters: any, callback) => {
         that.dnService.getDN(dataTablesParameters)
           .subscribe(resp => {
             that.dns = resp.data;
+            that.indexTable = resp.start;
             callback({
               recordsTotal: resp.recordsTotal,
               recordsFiltered: resp.recordsFiltered,
@@ -43,8 +49,11 @@ export class DNComponent implements OnInit {
           });
       },
       columns: [
-        { data: 'delivery' }, {data: 'invoiceNo' }, { data: 'materialParent' }, { data: 'materailDesc' },
+        { data: 'index' }, { data: 'delivery'}, { data: 'invoiceNo' }, { data: 'materialParent' }, { data: 'materialDesc' },
         { data: 'shipToCountry' }, { data: 'partyName' }, { data: 'customerInvoiceNo' }, { data: 'saleUnit' },
+        { data: 'actualGidate' }, { data: 'netValue' }, { data: 'dnqty' }, { data: 'netPrice' },
+        { data: 'harmonizationCode' }, { data: 'address' }, { data: 'plant' }, { data: 'planGidate' },
+        { data: 'planGisysDate' }, { data: 'insertedDate' }, { data: 'updatedDate' },
       ],
     };
   }

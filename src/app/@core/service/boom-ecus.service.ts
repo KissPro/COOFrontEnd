@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { DataTablesResponse } from '../data/coo-model';
 import { environment } from 'environments/environment';
 import { BoomEcusData } from '../models/boom-ecus';
+import { DataTablesResponse } from '../models/datatables';
 
 @Injectable()
 export class BoomEcusService extends BoomEcusData {

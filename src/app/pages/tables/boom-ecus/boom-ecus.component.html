@@ -1,34 +1,38 @@
-<table datatable [dtOptions]="dtOptions[1]" class="row-border hover">
+<table datatable [dtOptions]="dtOptions[1]" [dtTrigger]="dtTrigger" class="display row-border hover">
   <thead>
-    <tr>
-      <th>MaHS</th>
-      <th>Quantity</th>
-      <th>Don Gia</th>
-      <th>Country</th>
-      <th>So TK</th>
-      <th>Ngay DK</th>
-      <th>AltGroup</th>
-      <th>SortString</th>
-      <th>Parent Material</th>
+    <tr class="table-secondary">
+      <th>#</th>
+      <th>Plan</th>
+      <th>Parent&nbsp;Material</th>
       <th>Level</th>
       <th>Item</th>
-      <th>Plan</th>
+      <th>Ten&nbsp;Hang</th>
+      <th>MaHS</th>
+      <th>Quantity</th>
+      <th>Don&nbsp;Gia</th>
+      <th>Country</th>
+      <th>SoTK</th>
+      <th>NgayDK</th>
+      <th>Alt&nbsp;Group</th>
+      <th>Sort&nbsp;String</th>
     </tr>
   </thead>
   <tbody *ngIf="boomEcus?.length != 0">
-      <tr *ngFor="let boom of boomEcus">
+      <tr *ngFor="let boom of boomEcus;index as i">
+          <td>{{i + 1 + indexTable}}</td>
+          <td>{{ boom.plant }}</td>
+          <td>{{ boom.parentMaterial }}</td>
+          <td>{{ boom.level }}</td>
+          <td>{{ boom.item }}</td>
+          <td><div style="width: 300px;word-wrap: break-word;">{{ boom.tenHang }}</div></td>
           <td>{{ boom.maHS }}</td>
           <td>{{ boom.quantity }}</td>
           <td>{{ boom.donGiaHd }}</td>
           <td>{{ boom.country }}</td>
           <td>{{ boom.soTk }}</td>
-          <td>{{ boom.ngayDk }}</td>
+          <td>{{ boom.ngayDk | date: 'MM/dd/yyyy' }}</td>
           <td>{{ boom.altGroup }}</td>
           <td>{{ boom.sortString }}</td>
-          <td>{{ boom.parentMaterial }}</td>
-          <td>{{ boom.level }}</td>
-          <td>{{ boom.item }}</td>
-          <td>{{ boom.plan }}</td>
       </tr>
   </tbody>
   <tbody *ngIf="boomEcus?.length == 0">

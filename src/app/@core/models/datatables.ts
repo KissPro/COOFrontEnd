@@ -3,4 +3,7 @@ export interface DataTablesResponse {
     draw: number;
     recordsFiltered: number;
     recordsTotal: number;
+    pages: number;
+    start: number;
+    end: number;
 }

@@ -8,13 +8,31 @@ export const MENU_ITEMS: NbMenuItem[] = [
   },
   {
     title: 'Boom - Ecus',
-    icon: 'map-outline',
+    icon: 'sun-outline',
     link: '/pages/tables/boom-ecus',
   },
   {
     title: 'Delivery and Sales',
-    icon: 'text-outline',
+    icon: 'car-outline',
     link: '/pages/tables/dn',
+  },
+  {
+    title: 'Config',
+    icon: 'settings-outline',
+    children: [
+      {
+        title: 'Plant',
+        link: '/pages/layout/stepper',
+      },
+      {
+        title: 'Country Ship',
+        link: '/pages/layout/list',
+      },
+      {
+        title: 'Config',
+        link: '/pages/layout/infinite-list',
+      },
+    ],
   },
   {
     title: 'FEATURES',
