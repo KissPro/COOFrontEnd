@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { NbCardModule, NbIconModule, NbInputModule, NbTreeGridModule } from '@nebular/theme';
+import { NbCardModule, NbIconModule, NbInputModule, NbTabsetModule, NbTreeGridModule } from '@nebular/theme';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 
 import { ThemeModule } from '../../@theme/theme.module';
@@ -14,6 +14,7 @@ import { DNService } from 'app/@core/service/dn.service';
   imports: [
     NbCardModule,
     NbTreeGridModule,
+    NbTabsetModule,
     NbIconModule,
     NbInputModule,
     ThemeModule,

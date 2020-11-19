@@ -1,3 +1,8 @@
+<div class="row">
+    <div class="col-12">
+      <nb-card>
+        <nb-tabset fullWidth>
+          <nb-tab tabTitle="Incoming">
             <table datatable [dtOptions]="dtOptions[2]" class="row-border hover">
               <thead>
                 <tr class="table-secondary">
@@ -53,3 +58,14 @@
                 </tr>
               <tbody>
             </table>
+          </nb-tab>
+          <nb-tab tabTitle="Created">
+            <span>Content #2</span>
+          </nb-tab>
+          <nb-tab tabTitle="Completed">
+            <span>Content #3</span>
+          </nb-tab>
+        </nb-tabset>
+      </nb-card>
+    </div>
+  </div>
