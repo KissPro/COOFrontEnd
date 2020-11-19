@@ -1,55 +1,55 @@
-<table datatable [dtOptions]="dtOptions[2]" class="row-border hover">
-  <thead>
-    <tr class="table-secondary">
-        <th>#</th>
-        <th>Delivery</th>
-        <th>Invoice&nbsp;No</th>
-        <th>Material Parent</th>
-        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Material&nbsp;Desc&nbsp;&nbsp;&nbsp;&nbsp;</th>
-        <th>Ship To Country</th>
-        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Party&nbsp;Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-        <th>Invoice&nbsp;No</th>
-        <th>Sale Unit</th>
-        <th>Actual&nbsp;GI Date</th>
-        <th>Net&nbsp;Value</th>
-        <th>DN&nbsp;Qty</th>
-        <th>Net&nbsp;Price</th>
-        <th>Harmonization&nbsp;Code</th>
-        <th>Address</th>
-        <th>Plant</th>
-        <th>Plan&nbsp;GI Date</th>
-        <th>Plan&nbsp;GI SysDate</th>
-        <th>Inserted Date</th>
-        <th>Updated Date</th>
-    </tr>
-  </thead>
-  <tbody *ngIf="dns?.length != 0">
-      <tr *ngFor="let dn of dns; index as i">
-          <td>{{i + 1 + indexTable}}</td>
-          <td>{{ dn.delivery}}</td>
-          <td>{{ dn.invoiceNo }}</td>
-          <td>{{ dn.materialParent }}</td>
-          <td>{{ dn.materialDesc }}</td>
-          <td>{{ dn.shipToCountry }}</td>
-          <td>{{ dn.partyName }}</td>
-          <td>{{ dn.customerInvoiceNo }}</td>
-          <td>{{ dn.saleUnit }}</td>
-          <td>{{ dn.actualGidate | date: 'MM/dd/yyyy'}} </td>
-          <td>{{ dn.netValue }} </td>
-          <td>{{ dn.dnqty }} </td>
-          <td>{{ dn.netPrice }} </td>
-          <td>{{ dn.harmonizationCode }} </td>
-          <td>{{ dn.address }} </td>
-          <td>{{ dn.plant }} </td>
-          <td>{{ dn.planGidate | date: 'MM/dd/yyyy'}} </td>
-          <td>{{ dn.planGisysDate | date: 'MM/dd/yyyy'}} </td>
-          <td>{{ dn.insertedDate | date: 'MM/dd/yyyy'}} </td>
-          <td>{{ dn.updatedDate | date: 'MM/dd/yyyy'}} </td>
-      </tr>
-  </tbody>
-  <tbody *ngIf="dns?.length == 0">
-    <tr>
-      <td colspan="3" class="no-data-available">No data!</td>
-    </tr>
-  <tbody>
-</table>
+            <table datatable [dtOptions]="dtOptions[2]" class="row-border hover">
+              <thead>
+                <tr class="table-secondary">
+                    <th>#</th>
+                    <th>Delivery</th>
+                    <th>Invoice&nbsp;No</th>
+                    <th>Material Parent</th>
+                    <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Material&nbsp;Desc&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                    <th>Ship To Country</th>
+                    <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Party&nbsp;Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                    <th>Invoice&nbsp;No</th>
+                    <th>Sale Unit</th>
+                    <th>Actual&nbsp;GI Date</th>
+                    <th>Net&nbsp;Value</th>
+                    <th>DN&nbsp;Qty</th>
+                    <th>Net&nbsp;Price</th>
+                    <th>Harmonization&nbsp;Code</th>
+                    <th>Address</th>
+                    <th>Plant</th>
+                    <th>Plan&nbsp;GI Date</th>
+                    <th>Plan&nbsp;GI SysDate</th>
+                    <th>Inserted Date</th>
+                    <th>Updated Date</th>
+                </tr>
+              </thead>
+              <tbody *ngIf="dns?.length != 0">
+                  <tr *ngFor="let dn of dns; index as i">
+                      <td>{{i + 1 + indexTable}}</td>
+                      <td>{{ dn.delivery}}</td>
+                      <td>{{ dn.invoiceNo }}</td>
+                      <td>{{ dn.materialParent }}</td>
+                      <td>{{ dn.materialDesc }}</td>
+                      <td>{{ dn.shipToCountry }}</td>
+                      <td>{{ dn.partyName }}</td>
+                      <td>{{ dn.customerInvoiceNo }}</td>
+                      <td>{{ dn.saleUnit }}</td>
+                      <td>{{ dn.actualGidate | date: 'MM/dd/yyyy'}} </td>
+                      <td>{{ dn.netValue }} </td>
+                      <td>{{ dn.dnqty }} </td>
+                      <td>{{ dn.netPrice }} </td>
+                      <td>{{ dn.harmonizationCode }} </td>
+                      <td>{{ dn.address }} </td>
+                      <td>{{ dn.plant }} </td>
+                      <td>{{ dn.planGidate | date: 'MM/dd/yyyy'}} </td>
+                      <td>{{ dn.planGisysDate | date: 'MM/dd/yyyy'}} </td>
+                      <td>{{ dn.insertedDate | date: 'MM/dd/yyyy'}} </td>
+                      <td>{{ dn.updatedDate | date: 'MM/dd/yyyy'}} </td>
+                  </tr>
+              </tbody>
+              <tbody *ngIf="dns?.length == 0">
+                <tr>
+                  <td colspan="3" class="no-data-available">No data!</td>
+                </tr>
+              <tbody>
+            </table>
