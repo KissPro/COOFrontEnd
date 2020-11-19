@@ -1,0 +1,39 @@
+<table datatable [dtOptions]="dtOptions[1]" class="row-border hover">
+  <thead>
+    <tr>
+      <th>MaHS</th>
+      <th>Quantity</th>
+      <th>Don Gia</th>
+      <th>Country</th>
+      <th>So TK</th>
+      <th>Ngay DK</th>
+      <th>AltGroup</th>
+      <th>SortString</th>
+      <th>Parent Material</th>
+      <th>Level</th>
+      <th>Item</th>
+      <th>Plan</th>
+    </tr>
+  </thead>
+  <tbody *ngIf="boomEcus?.length != 0">
+      <tr *ngFor="let boom of boomEcus">
+          <td>{{ boom.maHS }}</td>
+          <td>{{ boom.quantity }}</td>
+          <td>{{ boom.donGiaHd }}</td>
+          <td>{{ boom.country }}</td>
+          <td>{{ boom.soTk }}</td>
+          <td>{{ boom.ngayDk }}</td>
+          <td>{{ boom.altGroup }}</td>
+          <td>{{ boom.sortString }}</td>
+          <td>{{ boom.parentMaterial }}</td>
+          <td>{{ boom.level }}</td>
+          <td>{{ boom.item }}</td>
+          <td>{{ boom.plan }}</td>
+      </tr>
+  </tbody>
+  <tbody *ngIf="boomEcus?.length == 0">
+    <tr>
+      <td colspan="3" class="no-data-available">No data!</td>
+    </tr>
+  <tbody>
+</table>

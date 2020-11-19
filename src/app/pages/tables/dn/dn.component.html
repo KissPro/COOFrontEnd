@@ -1,0 +1,43 @@
+<table datatable [dtOptions]="dtOptions[2]" class="row-border hover">
+  <thead>
+    <tr>
+        <th>Delivery</th>
+        <th>InvoiceNo</th>
+        <th>MaterialParent</th>
+        <th>MaterialDesc</th>
+        <th>ShipToCountry</th>
+        <th>PartyName</th>
+        <th>CustomerInvoiceNo</th>
+        <th>SaleUnit</th>
+        <!-- <th>ActualGIDate</th>
+        <th>NetValue</th>
+        <th>DNQty</th>
+        <th>NetPrice</th>
+        <th>PlanGIDate</th>
+        <th>PlanGISysDate</th>
+        <th>InsertedDate</th>
+        <th>UpdatedDate</th>
+        <th>Status</th>
+        <th>Address</th>
+        <th>HarmonizationCode</th>
+        <th>Plant</th> -->
+    </tr>
+  </thead>
+  <tbody *ngIf="dns?.length != 0">
+      <tr *ngFor="let dn of dns">
+          <td>{{ dn.delivery }}</td>
+          <td>{{ dn.invoiceNo }}</td>
+          <td>{{ dn.materialParent }}</td>
+          <td>{{ dn.materialDesc }}</td>
+          <td>{{ dn.shipToCountry }}</td>
+          <td>{{ dn.partyName }}</td>
+          <td>{{ dn.customerInvoiceNo }}</td>
+          <td>{{ dn.saleUnit }}</td>
+      </tr>
+  </tbody>
+  <tbody *ngIf="dns?.length == 0">
+    <tr>
+      <td colspan="3" class="no-data-available">No data!</td>
+    </tr>
+  <tbody>
+</table>
