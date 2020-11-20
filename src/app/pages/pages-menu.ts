@@ -26,7 +26,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
       },
       {
         title: 'Country Ship',
-        link: '/pages/layout/list',
+        link: '/pages/tables/country-ship',
       },
       {
         title: 'Config',

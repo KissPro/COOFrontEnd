@@ -9,6 +9,8 @@ import { DataTablesModule } from 'angular-datatables';
 import { COOService } from 'app/@core/mock/coo.service';
 import { BoomEcusService } from 'app/@core/service/boom-ecus.service';
 import { DNService } from 'app/@core/service/dn.service';
+import { CountryShipService } from 'app/@core/service/country-ship.service';
+import { GuidService } from 'app/@core/service/guid.service';
 
 @NgModule({
   imports: [
@@ -26,6 +28,6 @@ import { DNService } from 'app/@core/service/dn.service';
     ...routedComponents,
     FsIconComponent,
   ],
-  providers: [COOService, BoomEcusService, DNService],
+  providers: [COOService, BoomEcusService, DNService, CountryShipService, GuidService],
 })
 export class TablesModule { }

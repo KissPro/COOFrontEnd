@@ -31,84 +31,24 @@ export class SmartTableComponent {
         type: 'number',
       },
       firstName: {
-        title: 'First Name',
+        title: 'HMD Ship Code',
         type: 'string',
       },
       lastName: {
-        title: 'Last Name',
+        title: 'HMD Ship Party',
         type: 'string',
       },
       username: {
-        title: 'Username',
+        title: 'Country Code',
         type: 'string',
       },
       email: {
-        title: 'E-mail',
+        title: 'Country Name',
         type: 'string',
       },
       age: {
-        title: 'Age',
-        type: 'number',
-      },
-      id1: {
-        title: 'ID',
-        type: 'number',
-      },
-      firstName1: {
-        title: 'First Name',
+        title: 'Remark',
         type: 'string',
-      },
-      lastName1: {
-        title: 'Last Name',
-        type: 'string',
-      },
-      username1: {
-        title: 'Username',
-        type: 'string',
-      },
-      email1: {
-        title: 'E-mail',
-        type: 'string',
-      },
-      age1: {
-        title: 'Age',
-        type: 'number',
-      },
-      usernam1e: {
-        title: 'Username',
-        type: 'string',
-      },
-      em2ail: {
-        title: 'E-mail',
-        type: 'string',
-      },
-      a2ge: {
-        title: 'Age',
-        type: 'number',
-      },
-      i2d1: {
-        title: 'ID',
-        type: 'number',
-      },
-      first2Name1: {
-        title: 'First Name',
-        type: 'string',
-      },
-      last2Name1: {
-        title: 'Last Name',
-        type: 'string',
-      },
-      userna2me1: {
-        title: 'Username',
-        type: 'string',
-      },
-      emai2l1: {
-        title: 'E-mail',
-        type: 'string',
-      },
-      a2ge1: {
-        title: 'Age',
-        type: 'number',
       },
     },
   };

@@ -66,7 +66,7 @@ export class ToastrComponent {
     this.showToast(type, quote.title, quote.body);
   }
 
-  private showToast(type: NbComponentStatus, title: string, body: string) {
+  showToast(type: NbComponentStatus, title: string, body: string) {
     const config = {
       status: type,
       destroyByClick: this.destroyByClick,
@@ -75,12 +75,12 @@ export class ToastrComponent {
       position: this.position,
       preventDuplicates: this.preventDuplicates,
     };
-    const titleContent = title ? `. ${title}` : '';
+    const titleContent = title ? `${title}` : '';
 
     this.index += 1;
     this.toastrService.show(
       body,
-      `Toast ${this.index}${titleContent}`,
+      `${titleContent}`,
       config);
   }
 }

@@ -7,7 +7,7 @@ import { map } from 'rxjs/operators';
 import { environment } from 'environments/environment';
 import { Router } from '@angular/router';
 import { data, post } from 'jquery';
-import { Employee } from '../models/Employee';
+import { Employee, EmployeeModel } from '../models/Employee';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
@@ -35,6 +35,10 @@ export class AuthenticationService {
     success() {
         // tslint:disable-next-line: no-console
         console.log('this is hoang');
+    }
+
+    userName() {
+        return (<EmployeeModel>JSON.parse(localStorage.getItem('user'))).employee["display_name"];
     }
 
     logout() {

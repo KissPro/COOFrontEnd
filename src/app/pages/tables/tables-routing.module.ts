@@ -7,6 +7,7 @@ import { TreeGridComponent } from './tree-grid/tree-grid.component';
 import { DataTablesComponent} from './datatables-js/datatables.component';
 import { BoomEcusComponent } from './boom-ecus/boom-ecus.component';
 import { DNComponent } from './dn/dn.component';
+import { CountryShipComponent } from './country-ship/country-ship.component';
 
 const routes: Routes = [{
   path: '',
@@ -32,6 +33,10 @@ const routes: Routes = [{
       path: 'dn',
       component: DNComponent,
     },
+    {
+      path: 'country-ship',
+      component: CountryShipComponent,
+    },
   ],
 }];
 
@@ -48,4 +53,5 @@ export const routedComponents = [
   DataTablesComponent,
   BoomEcusComponent,
   DNComponent,
+  CountryShipComponent,
 ];

@@ -10,6 +10,7 @@ import { COOService } from 'app/@core/mock/coo.service';
 import { DataTablesModule } from 'angular-datatables';
 import { BoomEcusService } from 'app/@core/service/boom-ecus.service';
 import { DNService } from 'app/@core/service/dn.service';
+import { CountryShipService } from 'app/@core/service/country-ship.service';
 
 @NgModule({
   imports: [
@@ -23,7 +24,7 @@ import { DNService } from 'app/@core/service/dn.service';
   declarations: [
     PagesComponent,
   ],
-  providers: [COOService, BoomEcusService, DNService],
+  providers: [COOService, BoomEcusService, DNService, CountryShipService],
 })
 export class PagesModule {
 }
