@@ -1,4 +1,14 @@
+import { DatePipe } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { DefaultEditor, LocalDataSource } from 'ng2-smart-table';
+import { AuthenticationService } from 'app/@core/service/authentication.service';
+import { GuidService } from 'app/@core/service/guid.service';
+import { formatDate } from '@angular/common';
+import { NbDialogService, NbToastrService } from '@nebular/theme';
+import { ToastrComponent } from 'app/pages/modal-overlays/toastr/toastr.component';
+import { DialogConfirmComponent } from 'app/pages/modal-overlays/dialog/dialog-confirm/dialog-confirm.component';
+import { ConfigService } from 'app/@core/service/config.service';
 
 @Component({
   selector: 'ngx-config',
@@ -65,7 +75,7 @@ export class ConfigComponent {
           component: CustomInputEditorComponent,
         },
       },
-      remarkCountry: {
+      remarkconfig: {
         title: 'Remark',
         type: 'string',
       },
@@ -92,23 +102,27 @@ export class ConfigComponent {
   }
 
   onCreateConfirm(event): void {
-    const country = {
-      'id': this.guidService.getGuid(),
+    const newId = this.guidService.getGuid();
+    event.newData.id = newId;
+    const config = {
+      'id': newId,
       'ecusRuntime': event.newData.ecusRuntime,
       'dsruntime': event.newData.dsruntime,
-      'dstimeLastMonth': event.newData.dstimeLastMonth,
-      'dstimeNextMonth': event.newData.dstimeNextMonth,
-      'dstimeLastYear': event.newData.dstimeLastYear,
-      'dstimeNextYear': event.newData.dstimeNextYear,
+      'dstimeLastMonth': +event.newData.dstimeLastMonth,
+      'dstimeNextMonth': +event.newData.dstimeNextMonth,
+      'dstimeLastYear': +event.newData.dstimeLastYear,
+      'dstimeNextYear': +event.newData.dstimeNextYear,
       'updatedBy': this.authen.userName(),
       'updatedDate': new Date(),
-      'remarkConfig': event.newData.remarkCountry,
+      'remarkConfig': event.newData.remarkConfig,
     };
-    console.log(country);
-    this.serviceConfig.createConfig(country)
+
+    console.log(config);
+    this.serviceConfig.createConfig(config)
       .subscribe(result => {
         console.log(result);
         this.alert.showToast('success', 'Success', 'Create config successfully!');
+        // Show data -> local source
         event.confirm.resolve(event.newData);
       },
         (err: HttpErrorResponse) => {
@@ -122,9 +136,75 @@ export class ConfigComponent {
       );
   }
 
-  constructor() { }
-
-  ngOnInit(): void {
+  onSaveConfirm(event): void {
+    const config = {
+      'id': event.newData.id,
+      'ecusRuntime': event.newData.ecusRuntime,
+      'dsruntime': event.newData.dsruntime,
+      'dstimeLastMonth': +event.newData.dstimeLastMonth,
+      'dstimeNextMonth': +event.newData.dstimeNextMonth,
+      'dstimeLastYear': +event.newData.dstimeLastYear,
+      'dstimeNextYear': +event.newData.dstimeNextYear,
+      'updatedBy': this.authen.userName(),
+      'updatedDate': new Date(),
+      'remarkConfig': event.newData.remarkConfig,
+    };
+    const id = event.newData.id;
+    this.serviceConfig.editConfig(id, config)
+      .subscribe(() => {
+        this.alert.showToast('success', 'Success', 'Update config successfully!');
+        event.confirm.resolve(event.newData);
+      },
+        (err: HttpErrorResponse) => {
+          this.alert.showToast('danger', 'Error', 'Update the config error!');
+          if (err.error instanceof Error) {
+            console.log('Client-side error occured.');
+          } else {
+            console.log('Server-side error occured.');
+          }
+        },
+      );
   }
 
+  onDeleteConfirm(event): void {
+    this.dialogService.open(DialogConfirmComponent)
+      .onClose.subscribe(result => {
+        if (result === 1) {
+          const id = event.data.id;
+          this.serviceConfig.deleteConfig(id)
+            .subscribe(() => {
+              this.alert.showToast('success', 'Success', 'Delete the config successfully!');
+              event.confirm.resolve();
+            },
+              (err: HttpErrorResponse) => {
+                this.alert.showToast('danger', 'Error', 'Delete the config error!');
+                event.confirm.reject();
+                if (err.error instanceof Error) {
+                  console.log('Client-side error occured.');
+                } else {
+                  console.log('Server-side error occured.');
+                }
+              },
+            );
+        } else {
+          event.confirm.reject();
+        }
+      });
+  }
+}
+
+// Custome input
+@Component({
+  selector: 'ngx-input-editor',
+  template: `
+  <input type="text" value="{{ getDate()}}" class="form-control" readonly/>
+`,
+})
+export class CustomInputEditorComponent extends DefaultEditor {
+  constructor(public datePipe: DatePipe) {
+    super();
+  }
+  getDate() {
+    return formatDate(new Date(), 'MM/dd/yyyy', 'en_US');
+  }
 }

@@ -1,18 +1,14 @@
 import { DatePipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { CountryShipModel } from 'app/@core/models/country-ship';
 import { CountryShipService } from 'app/@core/service/country-ship.service';
-import { LocalDataSource, ServerDataSource } from 'ng2-smart-table';
-import { HttpClient } from '@angular/common/http';
+import { DefaultEditor, LocalDataSource, ServerDataSource } from 'ng2-smart-table';
 import { AuthenticationService } from 'app/@core/service/authentication.service';
 import { GuidService } from 'app/@core/service/guid.service';
+import { formatDate } from '@angular/common';
+import { NbDialogService, NbToastrService} from '@nebular/theme';
 import { ToastrComponent } from 'app/pages/modal-overlays/toastr/toastr.component';
-import {
-  NbToastrService,
-  NbToastrConfig,
-} from '@nebular/theme';
-
+import { DialogConfirmComponent } from 'app/pages/modal-overlays/dialog/dialog-confirm/dialog-confirm.component';
 
 @Component({
   selector: 'ngx-country-ship',
@@ -20,6 +16,10 @@ import {
   styleUrls: ['./country-ship.component.scss'],
 })
 export class CountryShipComponent {
+  source: LocalDataSource;
+  alert = new ToastrComponent(this.toastrService);
+
+  // Setting is setting table
   settings = {
     add: {
       addButtonContent: '<i class="nb-plus"></i>',
@@ -57,10 +57,16 @@ export class CountryShipComponent {
       updatedDate: {
         title: 'Updated Date',
         valuePrepareFunction: (created) => {
-          return this.datePipe.transform(new Date(created), 'MM/dd/yyyy');
+          if (isNaN(Date.parse(created))) {
+            return formatDate(new Date(), 'MM/dd/yyyy', 'en_US');
+          } else
+            // return this.datePipe.transform(new Date(created), 'MM/dd/yyyy');
+            return formatDate(new Date(created), 'MM/dd/yyyy', 'en_US');
         },
-        editable: false,
-        addable: false,
+        editor: {
+          type: 'custom',
+          component: CustomInputEditorComponent,
+        },
       },
       remarkCountry: {
         title: 'Remark',
@@ -68,22 +74,19 @@ export class CountryShipComponent {
       },
       id: {
         title: 'Id',
-        valuePrepareFunction: (created) => { return created.substring(0,8);},
+        valuePrepareFunction: (created) => created.substring(0, 8),
         editable: false,
         addable: false,
       },
     },
   };
 
-  source: LocalDataSource;
-  alert = new ToastrComponent(this.toastrService);
-
-  constructor(private serviceCountry: CountryShipService,
-              private datePipe: DatePipe,
-              private authen: AuthenticationService,
-              private guidService: GuidService,
-              private toastrService: NbToastrService,
-              private http: HttpClient) {
+  constructor(
+    private serviceCountry: CountryShipService,
+    private authen: AuthenticationService,
+    private guidService: GuidService,
+    private dialogService: NbDialogService,
+    private toastrService: NbToastrService) {
     this.source = new LocalDataSource();
     this.serviceCountry.getAllCountryShip()
       .subscribe(result => {
@@ -92,15 +95,17 @@ export class CountryShipComponent {
   }
 
   onCreateConfirm(event): void {
+    const newId = this.guidService.getGuid();
+    event.newData.id = newId;
     const country = {
-      "id": this.guidService.getGuid(),
-      "hmdShipToCode": event.newData.hmdShipToCode,
-      "hmdShipToParty": event.newData.hmdShipToParty,
-      "shipToCountryCode": event.newData.shipToCountryCode,
-      "shipToCountryName": event.newData.shipToCountryName,
-      "updatedBy": this.authen.userName(),
-      "updatedDate": new Date(),
-      "remarkCountry": event.newData.remarkCountry,
+      'id': newId,
+      'hmdShipToCode': event.newData.hmdShipToCode,
+      'hmdShipToParty': event.newData.hmdShipToParty,
+      'shipToCountryCode': event.newData.shipToCountryCode,
+      'shipToCountryName': event.newData.shipToCountryName,
+      'updatedBy': this.authen.userName(),
+      'updatedDate': new Date(),
+      'remarkCountry': event.newData.remarkCountry,
     };
     console.log(country);
     this.serviceCountry.createCountryShip(country)
@@ -112,9 +117,9 @@ export class CountryShipComponent {
         (err: HttpErrorResponse) => {
           this.alert.showToast('danger', 'Error', 'Create country ship error!');
           if (err.error instanceof Error) {
-            console.log("Client-side error occured.");
+            console.log('Client-side error occured.');
           } else {
-            console.log("Server-side error occured.");
+            console.log('Server-side error occured.');
           }
         },
       );
@@ -122,54 +127,71 @@ export class CountryShipComponent {
 
   onSaveConfirm(event): void {
     const country = {
-      "id": event.newData.id,
-      "hmdShipToCode": event.newData.hmdShipToCode,
-      "hmdShipToParty": event.newData.hmdShipToParty,
-      "shipToCountryCode": event.newData.shipToCountryCode,
-      "shipToCountryName": event.newData.shipToCountryName,
-      "updatedBy": this.authen.userName(),
-      "updatedDate": new Date(),
-      "remarkCountry": event.newData.remarkCountry,
+      'id': event.newData.id,
+      'hmdShipToCode': event.newData.hmdShipToCode,
+      'hmdShipToParty': event.newData.hmdShipToParty,
+      'shipToCountryCode': event.newData.shipToCountryCode,
+      'shipToCountryName': event.newData.shipToCountryName,
+      'updatedBy': this.authen.userName(),
+      'updatedDate': new Date(),
+      'remarkCountry': event.newData.remarkCountry,
     };
     const id = event.newData.id;
     this.serviceCountry.editCountryShip(id, country)
       .subscribe(result => {
-        console.log(result);
         this.alert.showToast('success', 'Success', 'Update country ship successfully!');
         event.confirm.resolve(event.newData);
       },
         (err: HttpErrorResponse) => {
           this.alert.showToast('danger', 'Error', 'Update the country ship error!');
           if (err.error instanceof Error) {
-            console.log("Client-side error occured.");
+            console.log('Client-side error occured.');
           } else {
-            console.log("Server-side error occured.");
+            console.log('Server-side error occured.');
           }
         },
       );
   }
 
   onDeleteConfirm(event): void {
-    if (window.confirm('Are you sure you want to delete?')) {
-      const id = event.data.id;
-      this.serviceCountry.deleteCountryShip(id)
-        .subscribe(result => {
-          console.log(result);
-          this.alert.showToast('success', 'Success', 'Delete the country ship successfully!');
-          event.confirm.resolve();
-        },
-          (err: HttpErrorResponse) => {
-            this.alert.showToast('danger', 'Error', 'Delete the country ship error!');
-            event.confirm.reject();
-            if (err.error instanceof Error) {
-              console.log("Client-side error occured.");
-            } else {
-              console.log("Server-side error occured.");
-            }
-          },
-        );
-    } else {
-      event.confirm.reject();
-    }
+    this.dialogService.open(DialogConfirmComponent)
+      .onClose.subscribe(result => {
+        if (result === 1) {
+          const id = event.data.id;
+          this.serviceCountry.deleteCountryShip(id)
+            .subscribe(() => {
+              this.alert.showToast('success', 'Success', 'Delete the country ship successfully!');
+              event.confirm.resolve();
+            },
+              (err: HttpErrorResponse) => {
+                this.alert.showToast('danger', 'Error', 'Delete the country ship error!');
+                event.confirm.reject();
+                if (err.error instanceof Error) {
+                  console.log('Client-side error occured.');
+                } else {
+                  console.log('Server-side error occured.');
+                }
+              },
+            );
+        } else {
+          event.confirm.reject();
+        }
+      });
+  }
+}
+
+// Custome input
+@Component({
+  selector: 'ngx-input-editor',
+  template: `
+    <input type="text" value="{{ getDate()}}" class="form-control" readonly/>
+  `,
+})
+export class CustomInputEditorComponent extends DefaultEditor {
+  constructor(public datePipe: DatePipe) {
+    super();
+  }
+  getDate() {
+    return formatDate(new Date(), 'MM/dd/yyyy', 'en_US');
   }
 }

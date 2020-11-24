@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
-import { CountryShipData, CountryShipModel } from '../models/country-ship';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { CountryShipData } from '../models/country-ship';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { environment } from 'environments/environment';
-import { CountryOrderData } from '../data/country-order';
 
 @Injectable()
 export class CountryShipService extends CountryShipData {

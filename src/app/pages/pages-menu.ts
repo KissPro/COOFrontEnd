@@ -22,7 +22,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     children: [
       {
         title: 'Plant',
-        link: '/pages/layout/stepper',
+        link: '/pages/tables/plant',
       },
       {
         title: 'Country Ship',
@@ -30,7 +30,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
       },
       {
         title: 'Config',
-        link: '/pages/layout/infinite-list',
+        link: '/pages/tables/config',
       },
     ],
   },

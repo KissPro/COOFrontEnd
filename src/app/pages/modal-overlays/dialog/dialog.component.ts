@@ -2,6 +2,9 @@ import { Component, TemplateRef } from '@angular/core';
 import { NbDialogService } from '@nebular/theme';
 import { ShowcaseDialogComponent } from './showcase-dialog/showcase-dialog.component';
 import { DialogNamePromptComponent } from './dialog-name-prompt/dialog-name-prompt.component';
+import { DialogConfirmComponent } from './dialog-confirm/dialog-confirm.component';
+import { DialogUploadFileComponent } from './dialog-upload-file/dialog-upload-file.component';
+import { Content } from '@angular/compiler/src/render3/r3_ast';
 
 @Component({
   selector: 'ngx-dialog',
@@ -29,9 +32,14 @@ export class DialogComponent {
   }
 
   open3() {
-    this.dialogService.open(DialogNamePromptComponent)
-      .onClose.subscribe(name => name && this.names.push(name));
+    this.dialogService.open(DialogUploadFileComponent, {
+      context: {
+        type: 'plant',
+      },
+    })
+      .onClose.subscribe(resutl => (resutl == 1) ? alert(resutl) : console.log(resutl));
   }
+
 
   openWithoutBackdrop(dialog: TemplateRef<any>) {
     this.dialogService.open(

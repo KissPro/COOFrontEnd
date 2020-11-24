@@ -5,8 +5,10 @@ import {
   NbCardModule,
   NbCheckboxModule,
   NbDialogModule,
+  NbIconModule,
   NbInputModule,
   NbPopoverModule,
+  NbProgressBarModule,
   NbSelectModule,
   NbTabsetModule,
   NbTooltipModule,
@@ -31,6 +33,9 @@ import {
   NgxPopoverTabsComponent,
 } from './popovers/popover-examples.component';
 import { TooltipComponent } from './tooltip/tooltip.component';
+import { DialogConfirmComponent } from './dialog/dialog-confirm/dialog-confirm.component';
+import { DialogUploadFileComponent } from './dialog/dialog-upload-file/dialog-upload-file.component';
+import { UploadService } from 'app/@core/service/upload-file.service';
 
 
 const COMPONENTS = [
@@ -39,6 +44,8 @@ const COMPONENTS = [
   DialogComponent,
   ShowcaseDialogComponent,
   DialogNamePromptComponent,
+  DialogConfirmComponent,
+  DialogUploadFileComponent,
   WindowComponent,
   WindowFormComponent,
   PopoversComponent,
@@ -51,6 +58,7 @@ const COMPONENTS = [
 const ENTRY_COMPONENTS = [
   ShowcaseDialogComponent,
   DialogNamePromptComponent,
+  DialogConfirmComponent,
   WindowFormComponent,
   NgxPopoverCardComponent,
   NgxPopoverFormComponent,
@@ -71,9 +79,12 @@ const MODULES = [
   NbInputModule,
   NbSelectModule,
   NbTooltipModule,
+  NbIconModule,
+  NbProgressBarModule,
 ];
 
 const SERVICES = [
+  UploadService,
 ];
 
 @NgModule({

@@ -8,6 +8,8 @@ import { DataTablesComponent} from './datatables-js/datatables.component';
 import { BoomEcusComponent } from './boom-ecus/boom-ecus.component';
 import { DNComponent } from './dn/dn.component';
 import { CountryShipComponent } from './country-ship/country-ship.component';
+import { ConfigComponent } from './config/config.component';
+import { PlantComponent } from './plant/plant.component';
 
 const routes: Routes = [{
   path: '',
@@ -37,6 +39,14 @@ const routes: Routes = [{
       path: 'country-ship',
       component: CountryShipComponent,
     },
+    {
+      path: 'config',
+      component: ConfigComponent,
+    },
+    {
+      path: 'plant',
+      component: PlantComponent,
+    },
   ],
 }];
 
@@ -54,4 +64,6 @@ export const routedComponents = [
   BoomEcusComponent,
   DNComponent,
   CountryShipComponent,
+  ConfigComponent,
+  PlantComponent,
 ];

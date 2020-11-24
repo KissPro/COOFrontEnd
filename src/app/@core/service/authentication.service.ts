@@ -36,7 +36,9 @@ export class AuthenticationService {
         // tslint:disable-next-line: no-console
         console.log('this is hoang');
     }
-
+    userId() {
+        return (<EmployeeModel>JSON.parse(localStorage.getItem('user'))).employee["employee_id"];
+    }
     userName() {
         return (<EmployeeModel>JSON.parse(localStorage.getItem('user'))).employee["display_name"];
     }
