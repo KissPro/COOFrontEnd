@@ -33,7 +33,7 @@ export class DNComponent implements OnInit {
       serverSide: true,
       processing: true,
       scrollX: true,
-      scrollY: '55vh',
+      // scrollY: '55vh',
       order: [1, 'asc'],
 
       ajax: (dataTablesParameters: any, callback) => {

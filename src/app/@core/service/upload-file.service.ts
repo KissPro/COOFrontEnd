@@ -43,4 +43,13 @@ export class UploadService {
           };
         return this.http.post(this.url + '/import-excel', file);
     }
+
+    DownloadFile(name: string) {
+        return this.http.get(this.urlFile + '/download/' + name, {responseType: 'arraybuffer'});
+    }
+
+
+    DownloadFile123(name: string) {
+        return this.http.get(this.urlFile + '/download/' + name, {responseType: 'blob'});
+    }
 }

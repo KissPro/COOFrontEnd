@@ -38,7 +38,7 @@ export class BoomEcusComponent implements OnInit, AfterViewInit, OnDestroy {
       serverSide: true,
       processing: true,
       scrollX: true, // header scroll
-      scrollY: '58vh', // hight data
+      // scrollY: '58vh', // hight data
       order: [1, 'asc'],
 
       ajax: (dataTablesParameters: any, callback) => {
