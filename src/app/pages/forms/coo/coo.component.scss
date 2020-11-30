@@ -1,0 +1,23 @@
+@import '../../../@theme/styles/themes';
+
+@include nb-install-component() {
+  ::ng-deep .form {
+    display: flex;
+    flex-direction: column;
+
+    .text-label {
+      margin-top: 1.5rem;
+    }
+  }
+}
+
+.coo {
+  max-height: 31rem;
+  min-width: 80rem;
+}
+.submitClass {
+  padding: 0 1rem 0 1rem;
+}
+.shipFrom {
+  width: 30rem;
+}

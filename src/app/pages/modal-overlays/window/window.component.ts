@@ -1,5 +1,6 @@
 import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { NbWindowService } from '@nebular/theme';
+import { COOComponent } from '../../forms/coo/coo.component';
 import { WindowFormComponent } from './window-form/window-form.component';
 
 @Component({
@@ -27,7 +28,7 @@ export class WindowComponent {
   }
 
   openWindowForm() {
-    this.windowService.open(WindowFormComponent, { title: `Window` });
+    this.windowService.open(WindowFormComponent, { title: `Create COO` })
   }
 
   openWindowWithoutBackdrop() {

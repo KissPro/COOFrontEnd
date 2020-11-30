@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
-import { NbActionsModule, NbButtonModule, NbCardModule, NbIconModule, NbInputModule, NbTabsetModule, NbTreeGridModule } from '@nebular/theme';
+import { NbActionsModule, NbButtonModule, NbCardModule, NbIconModule, NbInputModule,
+NbTabsetModule, NbTreeGridModule, NbWindowModule } from '@nebular/theme';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 
 import { ThemeModule } from '../../@theme/theme.module';
@@ -14,12 +15,14 @@ import { GuidService } from 'app/@core/service/guid.service';
 import { ModalOverlaysModule } from '../modal-overlays/modal-overlays.module';
 import { PlantService } from 'app/@core/service/plant.service';
 import { ConfigService } from 'app/@core/service/config.service';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
     NbCardModule,
     NbTreeGridModule,
     NbTabsetModule,
+    NbWindowModule,
     NbIconModule,
     NbInputModule,
     ThemeModule,
@@ -27,6 +30,7 @@ import { ConfigService } from 'app/@core/service/config.service';
     Ng2SmartTableModule,
     DataTablesModule,
     ModalOverlaysModule,
+    FormsModule,
     NbButtonModule,
     NbActionsModule,
   ],

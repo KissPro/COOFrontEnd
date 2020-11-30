@@ -19,6 +19,8 @@ import { FormLayoutsComponent } from './form-layouts/form-layouts.component';
 import { DatepickerComponent } from './datepicker/datepicker.component';
 import { ButtonsComponent } from './buttons/buttons.component';
 import { FormsModule as ngFormsModule } from '@angular/forms';
+import { COOComponent } from './coo/coo.component';
+import { COOExportService } from 'app/@core/service/coo-export.service';
 
 @NgModule({
   imports: [
@@ -42,6 +44,8 @@ import { FormsModule as ngFormsModule } from '@angular/forms';
     FormInputsComponent,
     FormLayoutsComponent,
     DatepickerComponent,
+    COOComponent,
   ],
+  providers: [COOExportService],
 })
 export class FormsModule { }

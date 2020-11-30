@@ -1,18 +1,19 @@
 import { HttpClient, HttpEventType } from '@angular/common/http';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { NbDialogRef, NbToastrService } from '@nebular/theme';
-import { NbDialogService } from '@nebular/theme';
 import { UploadService } from 'app/@core/service/upload-file.service';
-import { env } from 'process';
 import { ToastrComponent } from '../../toastr/toastr.component';
-import { DomSanitizer } from '@angular/platform-browser';
+
 @Component({
   selector: 'ngx-dialog-upload-file',
   templateUrl: 'dialog-upload-file.component.html',
   styleUrls: ['dialog-upload-file.component.scss'],
 })
 export class DialogUploadFileComponent {
-  type: String;
+  // Send from caller
+  type: string; // as folder
+  fileName: string;
+
   public progress: number;
   public message: string;
   statusProcess: string;
@@ -24,7 +25,6 @@ export class DialogUploadFileComponent {
   constructor(protected ref: NbDialogRef<DialogUploadFileComponent>,
     private http: HttpClient,
     private uploadService: UploadService,
-    private sanitizer: DomSanitizer,
     private toastrService: NbToastrService,
   ) { }
 
@@ -44,7 +44,7 @@ export class DialogUploadFileComponent {
     const formData = new FormData();
     formData.append('file', fileToUpload, fileToUpload.name);
 
-    this.uploadService.UploadExcel(formData, 'Plant')
+    this.uploadService.UploadExcel(formData, this.type)
       .subscribe(
         event => {
           if (event.type === HttpEventType.UploadProgress)
@@ -64,25 +64,20 @@ export class DialogUploadFileComponent {
     if (this.filePath !== undefined)
       this.uploadService.SubmitUpload(this.filePath).
         subscribe(
-          () => this.ref.close(this.type),
+          () => {
+            this.alert.showToast('success', 'Success', 'Upload ' + this.type + 'file successfully!');
+            this.ref.close('success');
+          },
           error => this.alert.showToast('danger', 'Error', 'Submit error!'),
         );
   }
 
   downloadTemplate() {
     this.statusProcess = 'info';
-    this.uploadService.DownloadFile123('CountryShip_Template.xlsx')
+    this.uploadService.DownloadFile(this.fileName)
       .subscribe(
-        result => this.downLoadFile(result, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        result => this.uploadService.ShowFile(result, this.fileName),
+        error => this.alert.showToast('danger', 'Error', 'Download template file error!'),
       );
-  }
-
-  downLoadFile(data: any, type: string) {
-    let blob = new Blob([data], { type: type });
-    let url = window.URL.createObjectURL(blob);
-    let pwa = window.open(url);
-    if (!pwa || pwa.closed || typeof pwa.closed == 'undefined') {
-      alert('Please disable your Pop-up blocker and try again.');
-    }
   }
 }

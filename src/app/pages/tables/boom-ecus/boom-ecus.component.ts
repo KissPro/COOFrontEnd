@@ -38,7 +38,7 @@ export class BoomEcusComponent implements OnInit, AfterViewInit, OnDestroy {
       serverSide: true,
       processing: true,
       scrollX: true, // header scroll
-      // scrollY: '58vh', // hight data
+      scrollY: '65vh', // hight data
       order: [1, 'asc'],
 
       ajax: (dataTablesParameters: any, callback) => {
@@ -51,7 +51,7 @@ export class BoomEcusComponent implements OnInit, AfterViewInit, OnDestroy {
               recordsFiltered: resp.recordsFiltered,
               data: [],
             });
-            setTimeout(() => this.rerender(), 1); // resize header
+            // setTimeout(() => this.rerender(), 1); // resize header
           });
       },
       columns: [
@@ -62,7 +62,7 @@ export class BoomEcusComponent implements OnInit, AfterViewInit, OnDestroy {
         { data: 'soTk' }, { data: 'ngayDk' }, { data: 'altGroup' }, { data: 'sortString' },
       ],
       columnDefs: [
-        { width: 300, targets: 5},
+        { width: 300, targets: 5 },
       ],
     };
   }
@@ -73,7 +73,7 @@ export class BoomEcusComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
   }
-
+  // For update size columns
   rerender(): void {
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       dtInstance.columns.adjust();
@@ -83,5 +83,22 @@ export class BoomEcusComponent implements OnInit, AfterViewInit, OnDestroy {
   toggleSidebar() {
     this.sidebarService.compact('menu-sidebar');
     this.layoutService.changeLayoutSize();
+  }
+
+  // Thao tác với table
+  currentRow;
+  selectedRow(event, i) {
+    if (i !== this.currentRow)
+      this.currentRow = i;
+    else
+      this.currentRow = null;
+  }
+
+  hideColumn() {
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      const column = dtInstance.column(1);
+      column.visible( ! column.visible() );
+    });
+    // this.rerender();
   }
 }

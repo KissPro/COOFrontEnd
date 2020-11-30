@@ -45,11 +45,23 @@ export class UploadService {
     }
 
     DownloadFile(name: string) {
-        return this.http.get(this.urlFile + '/download/' + name, {responseType: 'arraybuffer'});
-    }
-
-
-    DownloadFile123(name: string) {
         return this.http.get(this.urlFile + '/download/' + name, {responseType: 'blob'});
     }
+
+    ShowFile(newBlob: any, filename: string) {
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+          window.navigator.msSaveOrOpenBlob(newBlob);
+          return;
+        }
+        // For other browsers:
+        const data = window.URL.createObjectURL(newBlob);
+        const link = document.createElement('a');
+        link.href = data;
+        link.download = filename;
+        link.click();
+        setTimeout(() => {
+          // For Firefox it is necessary to delay revoking the ObjectURL
+          window.URL.revokeObjectURL(data);
+        }, 100);
+      }
 }

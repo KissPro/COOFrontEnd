@@ -34,10 +34,10 @@ export class DialogComponent {
   open3() {
     this.dialogService.open(DialogUploadFileComponent, {
       context: {
-        type: 'plant',
+        type: 'Plant',
       },
     })
-      .onClose.subscribe(resutl => (resutl == 1) ? alert(resutl) : console.log(resutl));
+    .onClose.subscribe(resutl => (resutl === 1) ? alert(resutl) : console.log(resutl));
   }
 
 

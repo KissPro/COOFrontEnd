@@ -2,7 +2,11 @@
     <div class="col-12">
       <nb-card>
         <nb-tabset fullWidth>
-          <nb-tab tabTitle="Incoming">
+          <nb-tab tabTitle="Incoming" tabIcon="bell-outline" responsive>
+            <div class="row classButton d-flex justify-content-end">
+              <button class="mr-2" outline nbButton status="success" (click)="openCreateCOO()" [disabled]="currentRow === undefined"><nb-icon icon="plus-outline"></nb-icon>COO</button>
+              <button class="" nbButton outline status="info"><nb-icon icon="download-outline"></nb-icon></button>
+            </div>
             <table datatable [dtOptions]="dtOptions[2]" class="row-border hover compact"> <!-- cell-border -->
               <thead>
                 <tr class="table-secondary">
@@ -13,14 +17,16 @@
                     <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Material&nbsp;Desc&nbsp;&nbsp;&nbsp;&nbsp;</th>
                     <th>Ship To Country</th>
                     <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Party&nbsp;Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-                    <th>Invoice&nbsp;No</th>
+                    <th>Customer Invoice&nbsp;No</th>
                     <th>Sale Unit</th>
                     <th>Actual&nbsp;GI Date</th>
                     <th>Net&nbsp;Value</th>
                     <th>DN&nbsp;Qty</th>
                     <th>Net&nbsp;Price</th>
                     <th>Harmonization&nbsp;Code</th>
-                    <th>Address</th>
+                    <th>Zip Code</th>
+                    <th>City</th>
+                    <th>Street</th>
                     <th>Plant</th>
                     <th>Plan&nbsp;GI Date</th>
                     <th>Plan&nbsp;GI SysDate</th>
@@ -29,7 +35,7 @@
                 </tr>
               </thead>
               <tbody *ngIf="dns?.length != 0">
-                  <tr *ngFor="let dn of dns; index as i">
+                  <tr *ngFor="let dn of dns; index as i" (click)="selectedRow($event, i, dn)"  [class.selected]="i === currentRow">
                       <td>{{i + 1 + indexTable}}</td>
                       <td>{{ dn.delivery}}</td>
                       <td>{{ dn.invoiceNo }}</td>
@@ -44,7 +50,9 @@
                       <td>{{ dn.dnqty }} </td>
                       <td>{{ dn.netPrice }} </td>
                       <td>{{ dn.harmonizationCode }} </td>
-                      <td>{{ dn.address }} </td>
+                      <td>{{ dn.address.split(';')[0] }} </td>
+                      <td>{{ dn.address.split(';')[1] }} </td>
+                      <td>{{ dn.address.split(';')[2] }} </td>
                       <td>{{ dn.plant }} </td>
                       <td>{{ dn.planGidate | date: 'MM/dd/yyyy'}} </td>
                       <td>{{ dn.planGisysDate | date: 'MM/dd/yyyy'}} </td>
@@ -59,12 +67,13 @@
               <tbody>
             </table>
           </nb-tab>
-          <nb-tab tabTitle="Created">
+          <nb-tab tabTitle="Created" tabIcon="navigation-2-outline" responsive>
             <span>Content #2</span>
           </nb-tab>
-          <nb-tab tabTitle="Completed">
+          <nb-tab tabTitle="Completed" tabIcon="checkmark-square-outline" responsive>
             <span>Content #3</span>
           </nb-tab>
+          <button class="float-right" nbButton status="info"><nb-icon icon="cloud-upload-outline"></nb-icon></button>
         </nb-tabset>
       </nb-card>
     </div>

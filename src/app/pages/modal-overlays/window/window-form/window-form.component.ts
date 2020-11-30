@@ -8,6 +8,7 @@ import { NbWindowRef } from '@nebular/theme';
       <input nbInput id="subject" type="text">
 
       <label class="text-label" for="text">Text:</label>
+      <button (click)="close()">Click me</button>
       <textarea nbInput id="text"></textarea>
     </form>
   `,
@@ -15,8 +16,8 @@ import { NbWindowRef } from '@nebular/theme';
 })
 export class WindowFormComponent {
   constructor(public windowRef: NbWindowRef) {}
-
   close() {
+    alert(1);
     this.windowRef.close();
   }
 }

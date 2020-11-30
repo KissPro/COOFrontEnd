@@ -1,9 +1,9 @@
 <nb-card>
   <nb-card-header>
     Boom & Ecus Table
-    <!-- <button class="float-right" nbButton status="info">
+    <button class="float-right" nbButton status="info" (click)="hideColumn()"> 
       <nb-icon icon="cloud-upload-outline"></nb-icon>
-    </button> -->
+    </button>
   </nb-card-header>
   <nb-card-body>
     <table datatable [dtOptions]="dtOptions[1]" [dtTrigger]="dtTrigger"
@@ -25,9 +25,9 @@
           <th>Alt&nbsp;Group</th>
           <th>Sort&nbsp;String</th>
         </tr>
-      </thead>
+      <!-- </thead> -->
       <tbody *ngIf="boomEcus?.length != 0">
-        <tr *ngFor="let boom of boomEcus;index as i">
+        <tr *ngFor="let boom of boomEcus;index as i" (click)="selectedRow($event, i)"  [class.selected]="i === currentRow">
           <td>{{i + 1 + indexTable}}</td>
           <td>{{ boom.plant }}</td>
           <td>{{ boom.parentMaterial }}</td>

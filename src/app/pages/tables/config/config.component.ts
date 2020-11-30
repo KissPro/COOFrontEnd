@@ -37,29 +37,13 @@ export class ConfigComponent {
       confirmDelete: true,
     },
     columns: {
-      ecusRuntime: {
-        title: 'Ecus Runtime',
+      key: {
+        title: 'Key',
         type: 'string',
       },
-      dsruntime: {
-        title: 'DN Runtime',
+      value: {
+        title: 'Value',
         type: 'string',
-      },
-      dstimeLastMonth: {
-        title: 'Last Month',
-        type: 'int',
-      },
-      dstimeNextMonth: {
-        title: 'Next Month',
-        type: 'int',
-      },
-      dstimeLastYear: {
-        title: 'Next Year',
-        type: 'int',
-      },
-      dstimeNextYear: {
-        title: 'Last Year',
-        type: 'int',
       },
       updatedDate: {
         title: 'Updated Date',
@@ -106,12 +90,8 @@ export class ConfigComponent {
     event.newData.id = newId;
     const config = {
       'id': newId,
-      'ecusRuntime': event.newData.ecusRuntime,
-      'dsruntime': event.newData.dsruntime,
-      'dstimeLastMonth': +event.newData.dstimeLastMonth,
-      'dstimeNextMonth': +event.newData.dstimeNextMonth,
-      'dstimeLastYear': +event.newData.dstimeLastYear,
-      'dstimeNextYear': +event.newData.dstimeNextYear,
+      'key': event.newData.key,
+      'value': event.newData.value,
       'updatedBy': this.authen.userName(),
       'updatedDate': new Date(),
       'remarkConfig': event.newData.remarkConfig,
@@ -139,12 +119,8 @@ export class ConfigComponent {
   onSaveConfirm(event): void {
     const config = {
       'id': event.newData.id,
-      'ecusRuntime': event.newData.ecusRuntime,
-      'dsruntime': event.newData.dsruntime,
-      'dstimeLastMonth': +event.newData.dstimeLastMonth,
-      'dstimeNextMonth': +event.newData.dstimeNextMonth,
-      'dstimeLastYear': +event.newData.dstimeLastYear,
-      'dstimeNextYear': +event.newData.dstimeNextYear,
+      'key': event.newData.key,
+      'value': event.newData.value,
       'updatedBy': this.authen.userName(),
       'updatedDate': new Date(),
       'remarkConfig': event.newData.remarkConfig,

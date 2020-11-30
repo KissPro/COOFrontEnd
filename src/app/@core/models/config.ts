@@ -2,12 +2,8 @@ import { Observable } from 'rxjs';
 
 export interface ConfigModel {
     id: string;
-    ecusRuntime: string;
-    dsruntime: string;
-    dstimeLastMonth: number;
-    dstimeNextMonth: number;
-    dstimeLastYear: number;
-    dstimeNextYear: number;
+    key: string;
+    value: string;
     updatedBy: string;
     updatedDate: Date;
     remarkConfig?: string;

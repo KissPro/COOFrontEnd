@@ -10,6 +10,7 @@ import { ToastrComponent } from 'app/pages/modal-overlays/toastr/toastr.componen
 import { DialogConfirmComponent } from 'app/pages/modal-overlays/dialog/dialog-confirm/dialog-confirm.component';
 import { ConfigService } from 'app/@core/service/config.service';
 import { PlantService } from 'app/@core/service/plant.service';
+import { DialogUploadFileComponent } from 'app/pages/modal-overlays/dialog/dialog-upload-file/dialog-upload-file.component';
 
 
 @Component({
@@ -17,7 +18,7 @@ import { PlantService } from 'app/@core/service/plant.service';
   templateUrl: './plant.component.html',
   styleUrls: ['./plant.component.scss'],
 })
-export class PlantComponent {
+export class PlantComponent implements OnInit {
   source: LocalDataSource;
   alert = new ToastrComponent(this.toastrService);
   // Setting is setting table
@@ -77,6 +78,12 @@ export class PlantComponent {
     private dialogService: NbDialogService,
     private toastrService: NbToastrService) {
     this.source = new LocalDataSource();
+  }
+  ngOnInit(): void {
+    this.LoadTable();
+  }
+
+  LoadTable() {
     this.plantConfig.getAllPlant()
       .subscribe(result => {
         this.source.load(result);
@@ -166,7 +173,12 @@ export class PlantComponent {
 
   // upload file
   uploadFile(): void {
-    alert(1);
+    this.dialogService.open(DialogUploadFileComponent, {
+      context: {
+        type: 'Plant',
+        fileName: 'Plant_Template.xlsx',
+      },
+    }).onClose.subscribe(result => (result === 'success') ? this.LoadTable() : null);
   }
 }
 
