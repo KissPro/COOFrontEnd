@@ -7,7 +7,7 @@
               <button class="mr-2" outline nbButton status="success" (click)="openCreateCOO()" [disabled]="currentRow === undefined"><nb-icon icon="plus-outline"></nb-icon>COO</button>
               <button class="" nbButton outline status="info"><nb-icon icon="download-outline"></nb-icon></button>
             </div>
-            <table datatable [dtOptions]="dtOptions[2]" class="row-border hover compact"> <!-- cell-border -->
+            <table datatable [dtOptions]="dtOptions[2]" class="row-border hover compact">
               <thead>
                 <tr class="table-secondary">
                     <th>#</th>
@@ -68,7 +68,53 @@
             </table>
           </nb-tab>
           <nb-tab tabTitle="Created" tabIcon="navigation-2-outline" responsive>
-            <span>Content #2</span>
+            <table datatable id="second-table" [dtOptions]="dtOptions[3]" class="row-border hover compact"> <!-- cell-border -->
+              <thead>
+                <tr class="table-secondary">
+                    <th>#</th>
+                    <th>NAME</th>
+                    <th>CODE</th>
+                    <th>DNN</th>
+                    <th>IC INVOICE NO</th>
+                    <th>CUSTOMER INVOICE</th>
+                    <th>DOC RECEIPT DATE</th>
+                    <th>COO NO.</th>/th>
+                    <th>RETURN DATE</th>
+                    <th>COO FORM</th>
+                    <th>TRACKING NO</th>
+                    <th>TRACKING DATE</th>
+                    <th>COURIER DATE</th>
+                    <th>SHIP FROM</th>
+                    <th>PACKAGE</th>
+                    <th>REMARK</th>
+                </tr>
+              </thead>
+              <tbody *ngIf="dnsManual?.length != 0">
+                  <tr *ngFor="let dn of dnsManual; index as i" (click)="selectedRow($event, i, dn)"  [class.selected]="i === currentRow">
+                      <td>{{i + 1 + indexTable2}}</td>
+                      <td>{{ dn.deliverySales.partyName}}</td>
+                      <td>{{ dn.deliverySales.shipToCountry }}</td>
+                      <td>{{ dn.deliverySales.delivery }}</td>
+                      <td>{{ dn.deliverySales.invoiceNo }}</td>
+                      <td>{{ dn.deliverySales.customerInvoiceNo }}</td>
+                      <td>{{ dn.receiptDate | date: 'MM/dd/yyyy'}}</td>
+                      <td>{{ dn.coono}}</td>
+                      <td>{{ dn.returnDate | date: 'MM/dd/yyyy'}}</td>
+                      <td>{{ dn.cooform }}</td>
+                      <td>{{ dn.trackingNo }} </td>
+                      <td>{{ dn.trackingDate | date: 'MM/dd/yyyy'}} </td>
+                      <td>{{ dn.courierDate | date: 'MM/dd/yyyy'}} </td>
+                      <td>{{ dn.shipFrom }} </td>
+                      <td>{{ dn.package }} </td>
+                      <td>{{ dn.remarkDs}} </td>
+                  </tr>
+              </tbody>
+              <tbody *ngIf="dns?.length == 0">
+                <tr>
+                  <td colspan="3" class="no-data-available">No data!</td>
+                </tr>
+              <tbody>
+            </table>
           </nb-tab>
           <nb-tab tabTitle="Completed" tabIcon="checkmark-square-outline" responsive>
             <span>Content #3</span>
