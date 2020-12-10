@@ -10,6 +10,7 @@ import { DNComponent } from './dn/dn.component';
 import { CountryShipComponent } from './country-ship/country-ship.component';
 import { ConfigComponent } from './config/config.component';
 import { PlantComponent } from './plant/plant.component';
+import { DNMComponent } from './dn/dnm.component';
 
 const routes: Routes = [{
   path: '',
@@ -34,6 +35,10 @@ const routes: Routes = [{
     {
       path: 'dn',
       component: DNComponent,
+    },
+    {
+      path: 'dnm',
+      component: DNMComponent,
     },
     {
       path: 'country-ship',
@@ -63,6 +68,7 @@ export const routedComponents = [
   DataTablesComponent,
   BoomEcusComponent,
   DNComponent,
+  DNMComponent,
   CountryShipComponent,
   ConfigComponent,
   PlantComponent,

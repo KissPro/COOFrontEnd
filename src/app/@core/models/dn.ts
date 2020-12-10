@@ -23,9 +23,32 @@ export interface DNModel {
     insertedDate: Date;
     updatedDate?: Date;
     status?: number;
+    shipToCountryName: string;
+    hmdShipToCode: string;
+}
+export interface DNManualModel {
+    id: string;
+    deliverySalesId: string;
+    coono: string;
+    receiptDate?: Date;
+    returnDate?: Date;
+    cooform?: string;
+    trackingNo?: string;
+    courierDate?: Date;
+    trackingDate?: Date;
+    origin?: string;
+    shipFrom: string;
+    package: string;
+    updatedBy?: string;
+    updatedDate?: Date;
+    remarkDs?: string;
+    deliverySales: DNModel;
 }
 
 export abstract class DNData {
 abstract getDN(dtParameter: any): Observable<DataTablesResponse>;
+abstract getDNManual(dtParameter: any, type: string): Observable<DataTablesResponse>;
 }
+
+
 

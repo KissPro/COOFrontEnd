@@ -4,133 +4,96 @@
       <nb-tabset fullWidth>
         <nb-tab tabTitle="Incoming" tabIcon="bell-outline" responsive>
           <div class="row classButton d-flex justify-content-end">
-              <button class="mr-2" outline nbButton status="success" (click)="openCreateCOO()" [disabled]="currentRow === undefined"><nb-icon icon="plus-outline"></nb-icon>COO</button>
-              <button class="" nbButton outline status="info"><nb-icon icon="download-outline"></nb-icon></button>
-            </div>
-          <table datatable id="first-table" [dtOptions]="dtOptions[2]" class="row-border hover compact">
-            <thead>
-              <tr class="table-secondary">
-                <th>#</th>
-                    <th>Delivery</th>
-                    <th>Invoice&nbsp;No</th>
-                    <th>Material Parent</th>
-                    <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Material&nbsp;Desc&nbsp;&nbsp;&nbsp;&nbsp;</th>
-                    <th>Ship To Country</th>
-                    <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Party&nbsp;Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-                    <th>Customer Invoice&nbsp;No</th>
-                    <th>Sale Unit</th>
-                    <th>Actual&nbsp;GI Date</th>
-                    <th>Net&nbsp;Value</th>
-                    <th>DN&nbsp;Qty</th>
-                    <th>Net&nbsp;Price</th>
-                    <th>Harmonization&nbsp;Code</th>
-                    <th>Zip Code</th>
-                    <th>City</th>
-                    <th>Street</th>
-                    <th>Plant</th>
-                    <th>Plan&nbsp;GI Date</th>
-                    <th>Plan&nbsp;GI SysDate</th>
-                    <th>Inserted Date</th>
-                    <th>Updated Date</th>
-                </tr>
-              </thead>
-              <tbody *ngIf="dns?.length != 0">
-                  <tr *ngFor="let dn of dns; index as i" (click)="selectedRow($event, i, dn)"  [class.selected]="i === currentRow">
-                      <td>{{i + 1 + indexTable}}</td>
-                      <td>{{ dn.delivery}}</td>
-                      <td>{{ dn.invoiceNo }}</td>
-                      <td>{{ dn.materialParent }}</td>
-                      <td>{{ dn.materialDesc }}</td>
-                      <td>{{ dn.shipToCountry }}</td>
-                      <td>{{ dn.partyName }}</td>
-                      <td>{{ dn.customerInvoiceNo }}</td>
-                      <td>{{ dn.saleUnit }}</td>
-                      <td>{{ dn.actualGidate | date: 'MM/dd/yyyy'}} </td>
-                      <td>{{ dn.netValue }} </td>
-                      <td>{{ dn.dnqty }} </td>
-                      <td>{{ dn.netPrice }} </td>
-                      <td>{{ dn.harmonizationCode }} </td>
-                      <td>{{ dn.address.split(';')[0] }} </td>
-                      <td>{{ dn.address.split(';')[1] }} </td>
-                      <td>{{ dn.address.split(';')[2] }} </td>
-                      <td>{{ dn.plant }} </td>
-                      <td>{{ dn.planGidate | date: 'MM/dd/yyyy'}} </td>
-                      <td>{{ dn.planGisysDate | date: 'MM/dd/yyyy'}} </td>
-                      <td>{{ dn.insertedDate | date: 'MM/dd/yyyy'}} </td>
-                      <td>{{ dn.updatedDate | date: 'MM/dd/yyyy'}} </td>
-                  </tr>
-              </tbody>
-              <tbody *ngIf="dns?.length == 0">
-                <tr>
-                  <td colspan="3" class="no-data-available">No data!</td>
-                </tr>
-              <tbody>
-            </table>
-          </nb-tab>
-          <nb-tab tabTitle="Created" tabIcon="navigation-2-outline" responsive>
-          <div class="row classButton d-flex justify-content-end">
             <button class="mr-2" outline nbButton status="success" (click)="openCreateCOO()"
               [disabled]="listSelectDN.length === 0">
               <nb-icon icon="plus-outline"></nb-icon>COO&nbsp;&nbsp;
               <div class="badge badge-danger" *ngIf="listSelectDN.length > 0">{{listSelectDN.length}}</div>
             </button>
-            <button class="" nbButton outline status="info">
+            <button class="" nbButton outline status="info" (click)="reloadIncomingTable()">
               <nb-icon icon="download-outline"></nb-icon>
             </button>
           </div>
-          <table datatable id="second-table" [dtOptions]="dtOptions[1]" class="row-border hover compact">
+          <table datatable id="first-table" [dtOptions]="dtOptions[0]" [dtTrigger]="dtTrigger" class="row-border hover compact">
             <thead>
               <tr class="table-secondary">
                 <th>#</th>
-                <th>NAME</th>
-                <th>CODE</th>
-                <th>DNN</th>
-                <th>IC INVOICE NO</th>
-                <th>CUSTOMER INVOICE</th>
-                <th>DOC RECEIPT DATE</th>
-                    <th>COO NO.</th>/th>
-                    <th>RETURN DATE</th>
-                    <th>COO FORM</th>
-                    <th>TRACKING NO</th>
-                    <th>TRACKING DATE</th>
-                    <th>COURIER DATE</th>
-                    <th>SHIP FROM</th>
-                    <th>PACKAGE</th>
-                    <th>REMARK</th>
-                </tr>
-              </thead>
-              <tbody *ngIf="dnsManual?.length != 0">
-                  <tr *ngFor="let dn of dnsManual; index as i" (click)="selectedRow($event, i, dn)"  [class.selected]="i === currentRow">
-                      <td>{{i + 1 + indexTable2}}</td>
-                      <td>{{ dn.deliverySales.partyName}}</td>
-                      <td>{{ dn.deliverySales.shipToCountry }}</td>
-                      <td>{{ dn.deliverySales.delivery }}</td>
-                      <td>{{ dn.deliverySales.invoiceNo }}</td>
-                      <td>{{ dn.deliverySales.customerInvoiceNo }}</td>
-                      <td>{{ dn.receiptDate | date: 'MM/dd/yyyy'}}</td>
-                      <td>{{ dn.coono}}</td>
-                      <td>{{ dn.returnDate | date: 'MM/dd/yyyy'}}</td>
-                      <td>{{ dn.cooform }}</td>
-                      <td>{{ dn.trackingNo }} </td>
-                      <td>{{ dn.trackingDate | date: 'MM/dd/yyyy'}} </td>
-                      <td>{{ dn.courierDate | date: 'MM/dd/yyyy'}} </td>
-                      <td>{{ dn.shipFrom }} </td>
-                      <td>{{ dn.package }} </td>
-                      <td>{{ dn.remarkDs}} </td>
-                  </tr>
-              </tbody>
-              <tbody *ngIf="dns?.length == 0">
-                <tr>
-                  <td colspan="3" class="no-data-available">No data!</td>
-                </tr>
-              <tbody>
-            </table>
-          </nb-tab>
-          <nb-tab tabTitle="Completed" tabIcon="checkmark-square-outline" responsive>
-            <span>Content #3</span>
-          </nb-tab>
-          <button class="float-right" nbButton status="info"><nb-icon icon="cloud-upload-outline"></nb-icon></button>
-        </nb-tabset>
-      </nb-card>
-    </div>
+                <th class="no-sort"><input type="checkbox" name="websitecheck" (click)="checkuncheckall()"></th>
+                <th>Delivery</th>
+                <th>Invoice&nbsp;No</th>
+                <th>Material&nbsp;Parent</th>
+                <th style="width:150px;">Material&nbsp;Desc</th>
+                <th>Ship&nbsp;To&nbsp;Country</th>
+                <th>HMD&nbsp;Ship Code</th>
+                <th style="width:150px;">Party&nbsp;Name</th>
+                <th>Customer Invoice&nbsp;No</th>
+                <th>Sale Unit</th>
+                <th>Actual&nbsp;GI Date</th>
+                <th>Net&nbsp;Value</th>
+                <th>DN&nbsp;Qty</th>
+                <th>Net&nbsp;Price</th>
+                <th>Harmonization&nbsp;Code</th>
+                <th>Zip&nbsp;Code</th>
+                <th style="width:100px;">City</th>
+                <th style="width:200px;">Street</th>
+                <th style="width:180px;">Adress</th>
+                <th>Plant</th>
+                <th>Plan&nbsp;GI Date</th>
+                <th>Plan&nbsp;GI SysDate</th>
+                <th>Inserted Date</th>
+                <th>Updated Date</th>
+              </tr>
+            </thead>
+            <tbody *ngIf="dns?.length != 0">
+              <tr *ngFor="let dn of dns; index as i" (click)="selectedRow($event, i, dn)"
+                [class.selected]="i === currentRow">
+                <td>{{i + 1 + indexTable}}</td>
+                <td><input type="checkbox" name="websitecheck" [checked]="checkList(dn)"></td>
+                <td>{{ dn.delivery}}</td>
+                <td>{{ dn.invoiceNo }}</td>
+                <td>{{ dn.materialParent }}</td>
+                <td>{{ dn.materialDesc }}</td>
+                <td>{{ dn.shipToCountryName }}</td>
+                <td>{{ dn.hmdShipToCode }}</td>
+                <td>{{ dn.partyName}}</td>
+                <td>{{ dn.customerInvoiceNo }}</td>
+                <td>{{ dn.saleUnit }}</td>
+                <td>{{ dn.actualGidate | date: 'MM/dd/yyyy'}} </td>
+                <td>{{ dn.netValue }} </td>
+                <td>{{ dn.dnqty }} </td>
+                <td>{{ dn.netPrice }} </td>
+                <td>{{ dn.harmonizationCode }} </td>
+                <td>{{ dn.address.split(';')[0] }} </td>
+                <td>
+                  <div style="width: 100px;word-wrap: break-word;">{{ dn.address.split(';')[1] }}</div>
+                </td>
+                <td>
+                  <div style="width: 200px;word-wrap: break-word;">{{ dn.address.split(';')[2] }}</div>
+                </td>
+                <td>
+                  <div style="width: 190px;word-wrap: break-word;">{{ dn.address.split(';')[3] }}</div>
+                </td>
+                <td>{{ dn.plant }} </td>
+                <td>{{ dn.planGidate | date: 'MM/dd/yyyy'}} </td>
+                <td>{{ dn.planGisysDate | date: 'MM/dd/yyyy'}} </td>
+                <td>{{ dn.insertedDate | date: 'MM/dd/yyyy'}} </td>
+                <td>{{ dn.updatedDate | date: 'MM/dd/yyyy'}} </td>
+              </tr>
+            </tbody>
+            <tbody *ngIf="dns?.length == 0">
+              <tr>
+                <td colspan="3" class="no-data-available">No data!</td>
+              </tr>
+            <tbody>
+          </table>
+        </nb-tab>
+        <nb-tab tabTitle="Created" tabIcon="navigation-2-outline" responsive>
+          <ngx-dnm [changeValue]="changeValue" type="created"></ngx-dnm>
+        </nb-tab>
+        <nb-tab tabTitle="Completed" tabIcon="checkmark-square-outline" responsive>
+          <ngx-dnm type=completed></ngx-dnm>
+        </nb-tab>
+      </nb-tabset>
+    </nb-card>
   </div>
+</div>
+

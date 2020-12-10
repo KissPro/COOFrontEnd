@@ -13,6 +13,7 @@ export class DialogUploadFileComponent {
   // Send from caller
   type: string; // as folder
   fileName: string;
+  urlUpload: string;
 
   public progress: number;
   public message: string;
@@ -62,7 +63,7 @@ export class DialogUploadFileComponent {
   submit() {
     this.statusProcess = 'danger';
     if (this.filePath !== undefined)
-      this.uploadService.SubmitUpload(this.filePath).
+      this.uploadService.SubmitUpload(this.urlUpload, this.filePath).
         subscribe(
           () => {
             this.alert.showToast('success', 'Success', 'Upload ' + this.type + 'file successfully!');

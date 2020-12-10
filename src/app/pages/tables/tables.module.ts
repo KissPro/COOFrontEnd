@@ -16,6 +16,7 @@ import { ModalOverlaysModule } from '../modal-overlays/modal-overlays.module';
 import { PlantService } from 'app/@core/service/plant.service';
 import { ConfigService } from 'app/@core/service/config.service';
 import { FormsModule } from '@angular/forms';
+import { DNMComponent } from './dn/dnm.component';
 
 @NgModule({
   imports: [

@@ -1,11 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { NbSidebarService, NbWindowService } from '@nebular/theme';
+import { NbSidebarService, NbToastrService, NbWindowService } from '@nebular/theme';
 import { LayoutService } from 'app/@core/utils';
-import { DNModel } from 'app/@core/models/dn';
+import { DNManualModel, DNModel } from 'app/@core/models/dn';
 import { DNService } from 'app/@core/service/dn.service';
 import { COOComponent } from 'app/pages/forms/coo/coo.component';
-
+import { ToastrComponent } from 'app/pages/modal-overlays/toastr/toastr.component';
+import { DNMComponent } from 'app/pages/tables/dn/dnm.component';
+import { DataTableDirective } from 'angular-datatables';
+import { Subject } from 'rxjs';
 
 
 @Component({
@@ -13,22 +16,37 @@ import { COOComponent } from 'app/pages/forms/coo/coo.component';
   templateUrl: 'dn.component.html',
   styleUrls: ['dn.component.scss'],
 })
-export class DNComponent implements OnInit {
+export class DNComponent implements OnInit, AfterViewInit, OnDestroy {
+
+  // Datatable parameter
   dtOptions: DataTables.Settings = {};
+  @ViewChild(DataTableDirective, { static: false })
+  dtElement: DataTableDirective;
+  dtTrigger: Subject<any> = new Subject();
+
+  // Variable
   dns: DNModel[];
   indexTable: number;
+  dnsManual: DNManualModel[];
+  indexTable2: number;
   selectedDN?: DNModel;
+  listSelectDN: DNModel[] = [];
+  alert = new ToastrComponent(this.toastrService);
+  changeValue: string;
 
   constructor(private http: HttpClient,
     private dnService: DNService,
     private sidebarService: NbSidebarService,
     private windowService: NbWindowService,
+    private toastrService: NbToastrService,
     private layoutService: LayoutService) { }
 
-  ngOnInit(): void {
-    const that = this;
-    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+  toggleSidebar() {
+    this.sidebarService.compact('menu-sidebar');
+    this.layoutService.changeLayoutSize();
+  }
 
+  ngOnInit(): void {
     this.toggleSidebar();
 
     this.loadIncomingTable();
@@ -41,44 +59,8 @@ export class DNComponent implements OnInit {
   }
 
   loadIncomingTable() {
-    console.log('load incoming table');
     // Incoming Table
     this.dtOptions[0] = {
-      pagingType: 'full_numbers',
-      pageLength: 10,
-      serverSide: true,
-      processing: true,
-      scrollX: true,
-      scrollY: '62vh',
-      order: [1, 'asc'],
-
-      ajax: (dataTablesParameters: any, callback) => {
-        that.dnService.getDN(dataTablesParameters)
-          .subscribe(resp => {
-            that.dns = resp.data;
-            that.indexTable = resp.start;
-            callback({
-              recordsTotal: resp.recordsTotal,
-              recordsFiltered: resp.recordsFiltered,
-              data: [],
-            });
-          });
-      },
-      columns: [
-        { data: 'index' }, { data: 'delivery' }, { data: 'invoiceNo' }, { data: 'materialParent' }, { data: 'materialDesc' },
-        { data: 'shipToCountry' }, { data: 'partyName' }, { data: 'customerInvoiceNo' }, { data: 'saleUnit' },
-        { data: 'actualGidate' }, { data: 'netValue' }, { data: 'dnqty' }, { data: 'netPrice' },
-        { data: 'harmonizationCode' }, { data: 'address' }, { data: 'address' },
-        { data: 'address' }, { data: 'plant' }, { data: 'planGidate' },
-        { data: 'planGisysDate' }, { data: 'insertedDate' }, { data: 'updatedDate' },
-      ],
-      columnDefs: [
-        { targets: 'no-sort', orderable: false },
-      ],
-    };
-
-    // Created COO Tables
-    this.dtOptions[1] = {
       pagingType: 'full_numbers',
       pageLength: 10,
       serverSide: true,
@@ -88,10 +70,10 @@ export class DNComponent implements OnInit {
       order: [2, 'asc'],
 
       ajax: (dataTablesParameters: any, callback) => {
-        this.dnService.getDNManual(dataTablesParameters)
+        this.dnService.getDN(dataTablesParameters)
           .subscribe(resp => {
-            this.dnsManual = resp.data;
-            this.indexTable2 = resp.start;
+            this.dns = resp.data;
+            this.indexTable = resp.start;
             callback({
               recordsTotal: resp.recordsTotal,
               recordsFiltered: resp.recordsFiltered,
@@ -100,13 +82,14 @@ export class DNComponent implements OnInit {
           });
       },
       columns: [
-        { data: 'index'},
-        { data: 'deliverySales.partyName' }, { data: 'deliverySales.shipToCountry' },
-        { data: 'deliverySales.delivery' }, { data: 'deliverySales.invoiceNo' }, { data: 'deliverySales.customerInvoiceNo' },
-        { data: 'receiptDate' }, { data: 'coono' },
-        { data: 'returnDate' }, { data: 'cooform' }, { data: 'trackingNo' },
-        { data: 'trackingDate' }, { data: 'courierDate' },
-        { data: 'shipFrom' }, { data: 'package' }, { data: 'remarkDs' },
+        { data: 'index' }, { data: 'invoiceNo' }, { data: 'delivery' }, { data: 'invoiceNo' },
+        { data: 'materialParent' }, { data: 'materialDesc' },
+        { data: 'shipToCountryName' }, { data: 'hmdShipToCode' }, { data: 'partyName' },
+        { data: 'customerInvoiceNo' }, { data: 'saleUnit' },
+        { data: 'actualGidate' }, { data: 'netValue' }, { data: 'dnqty' }, { data: 'netPrice' },
+        { data: 'harmonizationCode' }, { data: 'address' }, { data: 'address' },
+        { data: 'address' }, { data: 'address' }, { data: 'plant' }, { data: 'planGidate' },
+        { data: 'planGisysDate' }, { data: 'insertedDate' }, { data: 'updatedDate' },
       ],
       columnDefs: [
         { targets: 'no-sort', orderable: false },
@@ -114,30 +97,51 @@ export class DNComponent implements OnInit {
     };
   }
 
-  toggleSidebar() {
-    this.sidebarService.compact('menu-sidebar');
-    this.layoutService.changeLayoutSize();
+  reloadIncomingTable() {
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      dtInstance.ajax.reload();
+    });
   }
-
   // Thao tác với table
-  currentRow;
-  selectedRow(event, i, dn) {
-    if (i !== this.currentRow) {
-      this.currentRow = i;
-      this.selectedDN = dn;
-    } else
+  currentRow; // Hight light this line
+  selectedRow(event, i, dn: DNModel) {
+    if (!this.listSelectDN.find(x => x.delivery === dn.delivery
+      && x.invoiceNo === dn.invoiceNo
+      && x.materialParent === dn.materialParent)) {
+      // add to list
+      this.listSelectDN.push(dn);
+      this.currentRow = i; // hightlight
+    } else {
+      this.listSelectDN.splice(this.listSelectDN.indexOf(dn), 1);
       this.currentRow = undefined;
+    }
   }
 
   openCreateCOO() {
+    // list DN name
+    const listDNName = this.listSelectDN.map(x => x.delivery.toString()).join(',');
+
+    // Check address unique
+    const checkUnique = [...new Set(this.listSelectDN.map(x => x.address))];
+    if (checkUnique.length !== 1) {
+      this.alert.showToast('danger', 'Error', 'Adress must be unique!');
+      return;
+    }
     this.windowService.open(COOComponent,
       {
-        title: `Create COO Report - DN: ` + this.selectedDN.delivery,
-        context: { selectedDN: this.selectedDN },
-      });
+        title: `COO Report Information | DN: ` + listDNName,
+        context: { listSelectedDN: this.listSelectDN },
+      }).onClose.subscribe(
+        () => {
+          this.loadIncomingTable();
+          this.reloadIncomingTable();
+          this.listSelectDN = [];
+          this.changeValue = 'update-table-' + Date.now().toString();
+        },
+      );
   }
 
-  // Check box
+  // Select DN to export COO
   checkList(dn: DNModel) {
     if (!this.listSelectDN.find(x => x.delivery === dn.delivery
       && x.invoiceNo === dn.invoiceNo
@@ -147,13 +151,11 @@ export class DNComponent implements OnInit {
     } else
       return true;
   }
-
   checkuncheckall() {
     if (this.listSelectDN === this.dns) {
       this.listSelectDN = [];
     } else {
       this.listSelectDN = this.dns;
     }
-    console.log(this.listSelectDN);
   }
 }

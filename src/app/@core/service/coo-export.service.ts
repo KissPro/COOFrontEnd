@@ -11,9 +11,12 @@ export class COOExportService {
     constructor(
         private http: HttpClient,
     ) { }
-    readonly url = environment.apiUrl + '/api/dn/export-coo';
+    readonly url = environment.apiUrl + '/api/dn/';
 
     ExportCOO(coo: COOExportModel) {
-        return this.http.post(this.url, coo, { responseType: 'blob' });
+        return this.http.post(this.url + 'export-coo', coo, { responseType: 'blob' });
+    }
+    SaveCOO(coo: COOExportModel) {
+        return this.http.post(this.url + 'save-coo', coo);
     }
 }

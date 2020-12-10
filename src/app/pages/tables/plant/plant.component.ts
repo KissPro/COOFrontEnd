@@ -177,6 +177,7 @@ export class PlantComponent implements OnInit {
       context: {
         type: 'Plant',
         fileName: 'Plant_Template.xlsx',
+        urlUpload: '/api/plant/import-excel',
       },
     }).onClose.subscribe(result => (result === 'success') ? this.LoadTable() : null);
   }

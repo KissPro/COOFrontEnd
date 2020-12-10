@@ -1,0 +1,64 @@
+<div class="row classButton d-flex justify-content-end">
+    <button class="mr-2" outline nbButton status="success" [disabled]="listSelectDN.length === 0">
+        <nb-icon icon="plus-outline"></nb-icon>COO&nbsp;&nbsp;
+        <div class="badge badge-danger" *ngIf="listSelectDN.length > 0">{{listSelectDN.length}}</div>
+    </button>
+    <button class="" nbButton outline status="info" (click)="uploadFile()">
+        <nb-icon icon="cloud-upload-outline"></nb-icon>
+    </button>
+</div>
+<table datatable id="second-table" [dtOptions]="dtOptions[1]" [dtTrigger]="dtTrigger" class="row-border hover compact">
+    <thead>
+        <tr class="table-secondary">
+            <th class="no-sort">#</th>
+            <th>
+                <div style="width: 180px;word-wrap: break-word;">NAME</div>
+            </th>
+            <th>CODE</th>
+            <th>
+                <div style="width: 100px;word-wrap: break-word;">DNN</div>
+            </th>
+            <th>INVOICE&nbsp;NO</th>
+            <th>CUSTOMER INVOICE</th>
+            <th>DOC&nbsp;RECEIPT DATE</th>
+            <th>COO&nbsp;NO.</th>
+            <th>RETURN&nbsp;DATE</th>
+            <th>COO FORM</th>
+            <th>TRACKING&nbsp;NO</th>
+            <th>TRACKING&nbsp;DATE</th>
+            <th>COURIER&nbsp;DATE</th>
+            <th>SHIP&nbsp;FROM</th>
+            <th>PACKAGE</th>
+            <th>REMARK</th>
+        </tr>
+    </thead>
+    <tbody *ngIf="dns?.length != 0">
+        <tr *ngFor="let dn of dns; index as i" [class.selected]="i === currentRow">
+            <td>{{i + 1 + indexTable}}</td>
+            <td>
+                <div style="width: 180px;word-wrap: break-word;">{{ dn.deliverySales.partyName}}</div>
+            </td>
+            <td>{{ dn.deliverySales.shipToCountry }}</td>
+            <td style="background-color: rgb(216, 234, 240);">
+                <div style="width: 100px;word-wrap: break-word;">{{ dn.deliverySales.delivery }}</div>
+            </td>
+            <td>{{ dn.deliverySales.invoiceNo }}</td>
+            <td>{{ dn.deliverySales.customerInvoiceNo }}</td>
+            <td>{{ dn.receiptDate | date: 'MM/dd/yyyy'}}</td>
+            <td style="background-color: rgb(216, 234, 240);">{{ dn.coono }}</td>
+            <td>{{ dn.returnDate | date: 'MM/dd/yyyy'}}</td>
+            <td>{{ dn.cooform }}</td>
+            <td>{{ dn.trackingNo }} </td>
+            <td>{{ dn.trackingDate | date: 'MM/dd/yyyy'}} </td>
+            <td>{{ dn.courierDate | date: 'MM/dd/yyyy'}} </td>
+            <td>{{ dn.shipFrom }} </td>
+            <td>{{ dn.package }} </td>
+            <td>{{ dn.remarkDs}} </td>
+        </tr>
+    </tbody>
+    <tbody *ngIf="dns?.length == 0">
+        <tr>
+            <td colspan="3" class="no-data-available">No data!</td>
+        </tr>
+    <tbody>
+</table>

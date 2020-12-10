@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { NbWindowRef } from '@nebular/theme';
 import { COOExportModel } from 'app/@core/models/coo-export';
@@ -12,33 +13,70 @@ import { UploadService } from 'app/@core/service/upload-file.service';
 })
 export class COOComponent implements OnInit {
   // Send from caller
-  selectedDN?: DNModel;
+  listSelectedDN: DNModel[];
   shipFrom: string;
   cooNo: string;
+  packageNo: string;
   constructor(public windowRef: NbWindowRef,
-              private uploadService: UploadService,
-              private exportCOO: COOExportService,
-    ) { }
+    private uploadService: UploadService,
+    private exportCOO: COOExportService,
+  ) { }
 
   ngOnInit(): void {
-    console.log(this.selectedDN);
+  }
+
+
+  listRemoveDuplicate() {
+    return this.listSelectedDN.filter(
+      (dn, i, arr) => arr.findIndex(x => x.delivery === dn.delivery) === i,
+    );
+  }
+
+  listRemoveDuplicateHscode() {
+    return this.listSelectedDN.filter(
+      (dn, i, arr) => arr.findIndex(x => x.harmonizationCode === dn.harmonizationCode) === i,
+    );
   }
 
   onSubmit() {
-    this.windowRef.close();
+    // Get value - reload table
+    if (this.shipFrom === undefined || this.cooNo === undefined || this.packageNo === undefined) {
+      alert('Nhập input đế!');
+      return;
+    }
+    const coo: COOExportModel = {
+      dn: this.listSelectedDN,
+      ship: this.shipFrom,
+      cooNo: this.cooNo,
+      packageNo: this.packageNo,
+    };
+    this.exportCOO.SaveCOO(coo)
+      .subscribe(
+        result => {
+          console.log('save coo success!');
+          this.windowRef.close();
+        },
+        (error: HttpErrorResponse) => { console.log('save coo error' + error); },
+      );
   }
 
   onExport() {
+    // check input required
+    if (this.shipFrom === undefined || this.cooNo === undefined || this.packageNo === undefined) {
+      alert('Nhập input đế!');
+      return;
+    }
     const coo: COOExportModel = {
-      dn : this.selectedDN,
+      dn: this.listSelectedDN,
       ship: this.shipFrom,
       cooNo: this.cooNo,
+      packageNo: this.packageNo,
     };
-    alert(this.shipFrom);
     this.exportCOO.ExportCOO(coo)
-    .subscribe(
-      result => this.uploadService.ShowFile(result, 'COO.xlsx'),
-      // error => this.alert.showToast('danger', 'Error', 'Download template file error!'),
-    );
+      .subscribe(
+        result => this.uploadService.ShowFile(result, 'COO_Export_' + this.cooNo + '.xlsx'),
+      );
   }
 }
+
+

@@ -4,54 +4,52 @@
             <nb-card accent="info">
                 <nb-card-header>Customer Information</nb-card-header>
                 <nb-card-body>
-                    <p>Global Phones Technology LLC</p>
-                    <p>PO Box 120, Postal code 101</p>
-                    <p>South Al Ghubra, Muscat, Oman</p>
-                    <p>101 MUSCAT</p>
-                    <p>OMAN</p>
-                    <hr>
-                    <p>SHIP FROM: {{shipFrom}}</p>
-                    <p>SHIP TO: {{selectedDN.shipToCountry}}</p>
+                    <p>SHIP FROM: <b>{{shipFrom}}</b></p>
+                    <div *ngFor="let coo of listRemoveDuplicateHscode()">
+                        <hr>
+                        <p>HS Code: <b>{{coo.harmonizationCode}}</b></p>
+                        <hr>
+                    </div>
+                    <p>{{listRemoveDuplicate()[0].partyName}}</p>
+                    <p>{{listRemoveDuplicate()[0].address.split(';')[3]}}</p>
+                    <p>{{listRemoveDuplicate()[0].address.split(';')[2]}}</p>
+                    <p>{{listRemoveDuplicate()[0].address.split(';')[0]}}
+                        {{listRemoveDuplicate()[0].address.split(';')[1]}}</p>
+                    <p>{{listRemoveDuplicate()[0].shipToCountryName}}</p>
                 </nb-card-body>
             </nb-card>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <nb-card accent="success">
                 <nb-card-header>Product Description</nb-card-header>
                 <nb-card-body>
-                    <p>CELL PHONE <b>{{selectedDN.materialParent}}</b></p>
-                    <p><b>{{selectedDN.materialDesc}}</b></p>
-                    <p>CELL PHONE A00028235</p>
-                    <p>NOKIA 3310 DS TA-1030 GCC GREY </p>
-                    <p>CELL PHONE A00028237</p>
-                    <p>NOKIA 3310 DS TA-1030 GCC WARMRED</p>
-                    <hr>
-                    <p>HS Code: <b>A00028234</b></p>
+                    <div *ngFor="let coo of listSelectedDN">
+                        <p><b>CELL PHONE {{coo.materialParent}}</b></p>
+                        <p>{{coo.materialDesc}}</p>
+                        <p>PCS: {{coo.dnqty}}</p>
+                    </div>
                 </nb-card-body>
             </nb-card>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-5">
             <nb-card accent="warning">
                 <nb-card-header>Invoice Informartion</nb-card-header>
                 <nb-card-body>
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <td>Customer Invoice No</td>
-                                <td>Invoice Viet Nam Ref</td>
+                                <th>Customer Invoice No</th>
+                                <th>Date</th>
+                                <th>Invoice Viet Nam Ref</th>
+                                <th>Date</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td><b>{{selectedDN.customerInvoiceNo}}</b></td>
-                                <td><b>{{selectedDN.invoiceNo}}</b></td>
-                            </tr>
-                            <tr>
-                                <td><b>{{selectedDN.actualGidate | date: 'dd.MMM.yyyy' : 'UTC+4'}}</b></td>
-                                <td><b>{{selectedDN.planGisysDate | date: 'dd.MMM.yyyy' : 'UTC+4'}}</b></td>
-                            </tr>
-                            <tr>
-                                <td colspan="2" class="text-center"><b>{{selectedDN.dnqty}}</b></td>
+                            <tr *ngFor="let coo of listRemoveDuplicate()">
+                                <td>{{coo.customerInvoiceNo}}</td>
+                                <td>{{coo.actualGidate | date: 'dd.MMM.yyyy' : 'UTC+8'}}</td>
+                                <td>{{coo.invoiceNo}}</td>
+                                <td>{{coo.planGisysDate | date: 'dd.MMM.yyyy' : 'UTC+8'}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -66,8 +64,11 @@
                     <div class="row d-flex justify-content-end submitClass">
                         <input class="mr-auto shipFrom" [(ngModel)]="shipFrom" required type="text" nbInput
                             placeholder="Input Ship Form">
-                        <input type="text" nbInput [(ngModel)]="cooNo" placeholder="Input COO Number" required>
-                        <button class="ml-2" type="submit" (click)="onSubmit()" nbButton status="primary">Submit</button>
+                        <input type="text" nbInput [(ngModel)]="packageNo" placeholder="Input Package Number" required>
+                        <input type="text" class="ml-2" nbInput [(ngModel)]="cooNo" placeholder="Input COO Number"
+                            required>
+                        <button class="ml-2" type="submit" (click)="onSubmit()" nbButton
+                            status="primary">Submit</button>
                         <button class="ml-2" nbButton (click)="onExport()" outline status="success">Export</button>
                     </div>
                 </nb-card-body>

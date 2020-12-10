@@ -15,7 +15,6 @@ export class UploadService {
         private userService: AuthenticationService,
     ) { }
     user = this.userService.userId();
-    readonly url = environment.apiUrl + '/api/plant';
     readonly urlFile = environment.apiUrl + '/api/file';
 
     UploadExcel(formData: FormData, type: string) { // type: folder name, ex: Plant/CountryShip
@@ -36,12 +35,12 @@ export class UploadService {
         return this.http.post(this.urlFile + '/delete', file);
     }
 
-    SubmitUpload(path: string) {
+    SubmitUpload(urlUpload: string, path: string) {
         const file = {
             'path': path,
             'userId': this.user,
           };
-        return this.http.post(this.url + '/import-excel', file);
+        return this.http.post(environment.apiUrl + urlUpload, file);
     }
 
     DownloadFile(name: string) {
