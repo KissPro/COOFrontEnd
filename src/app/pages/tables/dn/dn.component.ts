@@ -30,7 +30,20 @@ export class DNComponent implements OnInit {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
     this.toggleSidebar();
-    this.dtOptions[2] = {
+
+    this.loadIncomingTable();
+  }
+  ngAfterViewInit(): void {
+    this.dtTrigger.next();
+  }
+  ngOnDestroy(): void {
+    this.dtTrigger.unsubscribe();
+  }
+
+  loadIncomingTable() {
+    console.log('load incoming table');
+    // Incoming Table
+    this.dtOptions[0] = {
       pagingType: 'full_numbers',
       pageLength: 10,
       serverSide: true,
@@ -65,7 +78,7 @@ export class DNComponent implements OnInit {
     };
 
     // Created COO Tables
-    this.dtOptions1[3] = {
+    this.dtOptions[1] = {
       pagingType: 'full_numbers',
       pageLength: 10,
       serverSide: true,

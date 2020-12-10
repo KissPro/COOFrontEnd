@@ -1,16 +1,16 @@
 <div class="row">
-    <div class="col-12">
-      <nb-card>
-        <nb-tabset fullWidth>
-          <nb-tab tabTitle="Incoming" tabIcon="bell-outline" responsive>
-            <div class="row classButton d-flex justify-content-end">
+  <div class="col-12">
+    <nb-card>
+      <nb-tabset fullWidth>
+        <nb-tab tabTitle="Incoming" tabIcon="bell-outline" responsive>
+          <div class="row classButton d-flex justify-content-end">
               <button class="mr-2" outline nbButton status="success" (click)="openCreateCOO()" [disabled]="currentRow === undefined"><nb-icon icon="plus-outline"></nb-icon>COO</button>
               <button class="" nbButton outline status="info"><nb-icon icon="download-outline"></nb-icon></button>
             </div>
-            <table datatable [dtOptions]="dtOptions[2]" class="row-border hover compact">
-              <thead>
-                <tr class="table-secondary">
-                    <th>#</th>
+          <table datatable id="first-table" [dtOptions]="dtOptions[2]" class="row-border hover compact">
+            <thead>
+              <tr class="table-secondary">
+                <th>#</th>
                     <th>Delivery</th>
                     <th>Invoice&nbsp;No</th>
                     <th>Material Parent</th>
@@ -68,16 +68,26 @@
             </table>
           </nb-tab>
           <nb-tab tabTitle="Created" tabIcon="navigation-2-outline" responsive>
-            <table datatable id="second-table" [dtOptions]="dtOptions[3]" class="row-border hover compact"> <!-- cell-border -->
-              <thead>
-                <tr class="table-secondary">
-                    <th>#</th>
-                    <th>NAME</th>
-                    <th>CODE</th>
-                    <th>DNN</th>
-                    <th>IC INVOICE NO</th>
-                    <th>CUSTOMER INVOICE</th>
-                    <th>DOC RECEIPT DATE</th>
+          <div class="row classButton d-flex justify-content-end">
+            <button class="mr-2" outline nbButton status="success" (click)="openCreateCOO()"
+              [disabled]="listSelectDN.length === 0">
+              <nb-icon icon="plus-outline"></nb-icon>COO&nbsp;&nbsp;
+              <div class="badge badge-danger" *ngIf="listSelectDN.length > 0">{{listSelectDN.length}}</div>
+            </button>
+            <button class="" nbButton outline status="info">
+              <nb-icon icon="download-outline"></nb-icon>
+            </button>
+          </div>
+          <table datatable id="second-table" [dtOptions]="dtOptions[1]" class="row-border hover compact">
+            <thead>
+              <tr class="table-secondary">
+                <th>#</th>
+                <th>NAME</th>
+                <th>CODE</th>
+                <th>DNN</th>
+                <th>IC INVOICE NO</th>
+                <th>CUSTOMER INVOICE</th>
+                <th>DOC RECEIPT DATE</th>
                     <th>COO NO.</th>/th>
                     <th>RETURN DATE</th>
                     <th>COO FORM</th>
