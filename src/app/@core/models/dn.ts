@@ -48,6 +48,7 @@ export interface DNManualModel {
 export abstract class DNData {
 abstract getDN(dtParameter: any): Observable<DataTablesResponse>;
 abstract getDNManual(dtParameter: any, type: string): Observable<DataTablesResponse>;
+abstract getListDNCOO(cooNo: string): Observable<DNModel[]>;
 }
 
 

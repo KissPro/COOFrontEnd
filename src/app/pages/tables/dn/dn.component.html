@@ -9,11 +9,12 @@
               <nb-icon icon="plus-outline"></nb-icon>COO&nbsp;&nbsp;
               <div class="badge badge-danger" *ngIf="listSelectDN.length > 0">{{listSelectDN.length}}</div>
             </button>
-            <button class="" nbButton outline status="info" (click)="reloadIncomingTable()">
+            <button class="" nbButton outline status="success" (click)="downloadDN()">
               <nb-icon icon="download-outline"></nb-icon>
             </button>
           </div>
-          <table datatable id="first-table" [dtOptions]="dtOptions[0]" [dtTrigger]="dtTrigger" class="row-border hover compact">
+          <table datatable id="first-table" [dtOptions]="dtOptions[0]" [dtTrigger]="dtTrigger"
+            class="row-border hover compact">
             <thead>
               <tr class="table-secondary">
                 <th>#</th>
@@ -87,13 +88,16 @@
           </table>
         </nb-tab>
         <nb-tab tabTitle="Created" tabIcon="navigation-2-outline" responsive>
-          <ngx-dnm [changeValue]="changeValue" type="created"></ngx-dnm>
+          <ngx-dnm [changeValue]="changeValue"
+          (openCOO)="openCOOCreated($event)"
+          type="created"></ngx-dnm>
         </nb-tab>
         <nb-tab tabTitle="Completed" tabIcon="checkmark-square-outline" responsive>
-          <ngx-dnm type=completed></ngx-dnm>
+          <ngx-dnm [changeValue]="changeValue"
+          (openCOO)="openCOOCreated($event)"
+          type="completed"></ngx-dnm>
         </nb-tab>
       </nb-tabset>
     </nb-card>
   </div>
 </div>
-

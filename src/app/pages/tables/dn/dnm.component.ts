@@ -1,4 +1,5 @@
-import { AfterViewInit, Component, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, OnChanges, OnDestroy,
+    OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { DNManualModel, DNModel } from 'app/@core/models/dn';
 import { DNService } from 'app/@core/service/dn.service';
@@ -7,6 +8,7 @@ import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { NbDialogService } from '@nebular/theme';
 import { DialogUploadFileComponent } from 'app/pages/modal-overlays/dialog/dialog-upload-file/dialog-upload-file.component';
+import { UploadService } from 'app/@core/service/upload-file.service';
 
 
 @Component({
@@ -18,6 +20,8 @@ export class DNMComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges
     @Input() changeValue: string;
     @Input() type: string;
 
+    @Output() openCOO = new EventEmitter<any>();
+
     // Datatable parameter
     dtOptions: DataTables.Settings = {};
     @ViewChild(DataTableDirective, { static: false })
@@ -25,15 +29,15 @@ export class DNMComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges
     dtTrigger: Subject<any> = new Subject();
 
     // Variable
-    dns: DNModel[];
+    dns: DNManualModel[];
     indexTable: number;
 
-    selectedDN?: DNModel;
-    listSelectDN: DNModel[] = [];
-
+    selectedDN?: DNManualModel;
+    listSelectDN: DNManualModel[] = [];
 
     constructor(
         private dnService: DNService,
+        private uploadService: UploadService,
         private dialogService: NbDialogService,
     ) { }
 
@@ -109,5 +113,36 @@ export class DNMComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges
                 urlUpload: '/api/dn/import-excel',
             },
         }).onClose.subscribe(result => (result === 'success') ? this.reloadCOOTable() : null);
+    }
+
+    downloadManual() {
+        this.dnService.DownloadManual(this.type)
+        .subscribe(
+          result => this.uploadService.ShowFile(result, 'Download_DN_Manual_' + new Date().toLocaleString()),
+        );
+    }
+
+    // select row
+    currentRow; // Hight light this line
+    selectedRow(event, i, dn: DNManualModel) {
+        if (this.currentRow !== i) {
+            // add to list
+            this.selectedDN = dn;
+            this.currentRow = i; // hightlight
+        } else {
+            this.currentRow = undefined;
+            this.selectedDN = undefined;
+        }
+    }
+
+    openEdit(event, i, dn: DNManualModel, dialog: TemplateRef<any>) {
+        this.selectedDN = dn;
+        this.dialogService.open(
+            dialog,
+            { context: 'this is some additional data passed to dialog' });
+    }
+
+    openCOOCreated() {
+        this.openCOO.emit(this.selectedDN);
     }
 }

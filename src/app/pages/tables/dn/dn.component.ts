@@ -9,6 +9,7 @@ import { ToastrComponent } from 'app/pages/modal-overlays/toastr/toastr.componen
 import { DNMComponent } from 'app/pages/tables/dn/dnm.component';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
+import { UploadService } from 'app/@core/service/upload-file.service';
 
 
 @Component({
@@ -34,11 +35,19 @@ export class DNComponent implements OnInit, AfterViewInit, OnDestroy {
   alert = new ToastrComponent(this.toastrService);
   changeValue: string;
 
+  // Pass to coo form
+  shipFrom: string;
+  cooNo: string;
+  packageNo: string;
+  type: string = 'add';
+
+
   constructor(private http: HttpClient,
     private dnService: DNService,
     private sidebarService: NbSidebarService,
     private windowService: NbWindowService,
     private toastrService: NbToastrService,
+    private uploadService: UploadService,
     private layoutService: LayoutService) { }
 
   toggleSidebar() {
@@ -130,15 +139,48 @@ export class DNComponent implements OnInit, AfterViewInit, OnDestroy {
     this.windowService.open(COOComponent,
       {
         title: `COO Report Information | DN: ` + listDNName,
-        context: { listSelectedDN: this.listSelectDN },
+        context: {
+          listSelectedDN: this.listSelectDN,
+          shipFrom: this.shipFrom,
+          cooNo: this.cooNo,
+          packageNo: this.packageNo,
+          type: this.type,
+        },
       }).onClose.subscribe(
         () => {
           this.loadIncomingTable();
           this.reloadIncomingTable();
+          // Clear selected
           this.listSelectDN = [];
+          this.shipFrom = undefined;
+          this.cooNo = undefined;
+          this.packageNo = undefined;
+          this.type = 'add';
+          // update child table - coo manual
           this.changeValue = 'update-table-' + Date.now().toString();
         },
       );
+  }
+
+  openCOOCreated(dnm: DNManualModel) {
+    this.shipFrom = dnm.shipFrom;
+    this.cooNo = dnm.coono;
+    this.packageNo = dnm.package;
+    this.type = 'update';
+    // set list dn
+    this.dnService.getListDNCOO(this.cooNo)
+    .subscribe(result => {
+      console.log(result);
+      this.listSelectDN = result;
+      this.openCreateCOO();
+    });
+  }
+
+  downloadDN() {
+    this.dnService.DownloadDN()
+    .subscribe(
+      result => this.uploadService.ShowFile(result, 'Download_DN_' + new Date().toLocaleString()),
+    );
   }
 
   // Select DN to export COO

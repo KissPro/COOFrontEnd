@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { NbMenuModule } from '@nebular/theme';
+import { NbDatepickerModule, NbMenuModule } from '@nebular/theme';
 
 import { ThemeModule } from '../@theme/theme.module';
 import { PagesComponent } from './pages.component';
@@ -20,6 +20,7 @@ import { CountryShipService } from 'app/@core/service/country-ship.service';
     DashboardModule,
     MiscellaneousModule,
     DataTablesModule,
+    NbDatepickerModule,
   ],
   declarations: [
     PagesComponent,

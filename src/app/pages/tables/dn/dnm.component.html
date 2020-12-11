@@ -1,10 +1,13 @@
 <div class="row classButton d-flex justify-content-end">
-    <button class="mr-2" outline nbButton status="success" [disabled]="listSelectDN.length === 0">
-        <nb-icon icon="plus-outline"></nb-icon>COO&nbsp;&nbsp;
-        <div class="badge badge-danger" *ngIf="listSelectDN.length > 0">{{listSelectDN.length}}</div>
+    <button class="mr-2" outline nbButton status="success" [disabled]="selectedDN === undefined"
+        (click)="openCOOCreated()">
+        <nb-icon icon="book-open-outline"></nb-icon>COO&nbsp;&nbsp;
     </button>
-    <button class="" nbButton outline status="info" (click)="uploadFile()">
+    <button class="mr-2" nbButton outline status="info" (click)="uploadFile()">
         <nb-icon icon="cloud-upload-outline"></nb-icon>
+    </button>
+    <button class="" nbButton outline status="success" (click)="downloadManual()">
+        <nb-icon icon="download-outline"></nb-icon>
     </button>
 </div>
 <table datatable id="second-table" [dtOptions]="dtOptions[1]" [dtTrigger]="dtTrigger" class="row-border hover compact">
@@ -33,19 +36,20 @@
         </tr>
     </thead>
     <tbody *ngIf="dns?.length != 0">
-        <tr *ngFor="let dn of dns; index as i" [class.selected]="i === currentRow">
+        <tr *ngFor="let dn of dns; index as i" [class.selected]="i === currentRow" (click)="selectedRow($event, i, dn)"
+            (dblclick)="openEdit($event, i, dn, dialog)">
             <td>{{i + 1 + indexTable}}</td>
             <td>
                 <div style="width: 180px;word-wrap: break-word;">{{ dn.deliverySales.partyName}}</div>
             </td>
             <td>{{ dn.deliverySales.shipToCountry }}</td>
-            <td style="background-color: rgb(216, 234, 240);">
+            <td [style.background-color]="i !== currentRow ? 'rgb(216, 234, 240)' : '#b0bed9'">
                 <div style="width: 100px;word-wrap: break-word;">{{ dn.deliverySales.delivery }}</div>
             </td>
             <td>{{ dn.deliverySales.invoiceNo }}</td>
             <td>{{ dn.deliverySales.customerInvoiceNo }}</td>
             <td>{{ dn.receiptDate | date: 'MM/dd/yyyy'}}</td>
-            <td style="background-color: rgb(216, 234, 240);">{{ dn.coono }}</td>
+            <td [style.background-color]="i !== currentRow ? 'rgb(216, 234, 240)' : '#b0bed9'">{{ dn.coono }}</td>
             <td>{{ dn.returnDate | date: 'MM/dd/yyyy'}}</td>
             <td>{{ dn.cooform }}</td>
             <td>{{ dn.trackingNo }} </td>
@@ -62,3 +66,80 @@
         </tr>
     <tbody>
 </table>
+
+
+
+<ng-template #dialog let-data let-ref="dialogRef">
+    <nb-card accent="info" size="medium">
+        <nb-card-header>Update COO Manual Information</nb-card-header>
+        <nb-card-body>
+            <div class="row">
+                <div class="col-sm-4">
+                    <input type="text" nbInput fullWidth status="info" shape="semi-round" tabIndex="-1"
+                        value="NAME: {{this.selectedDN.deliverySales.partyName}}">
+                </div>
+                <div class="col-sm-4">
+                    <input type="text" nbInput fullWidth status="info" shape="semi-round" tabIndex="-1"
+                        value="DN: {{this.selectedDN.deliverySales.delivery}}">
+                </div>
+                <div class="col-sm-4">
+                    <input type="text" nbInput fullWidth status="info" shape="semi-round" tabIndex="-1"
+                        value="COO: {{this.selectedDN.coono}}">
+                </div>
+            </div>
+            <br><br>
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label for="inputTrackingNo" class="label">Tracking No</label>
+                        <input type="text" nbInput fullWidth id="inputTrackingNo" placeholder="Tracking No">
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label for="inputTrackingDate" class="label">Tracking Date</label>
+                        <!-- <input type="text" nbInput fullWidth id="inputLastName" placeholder="Tracking Date"> -->
+                        <input [nbDatepicker]="datepicker" nbInput fullWidth id="inputTrackingDate" placeholder="Tracking Date">
+                        <nb-datepicker #datepicker></nb-datepicker>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label for="inputCourierDate" class="label">Courier Date</label>
+                        <input type="text" nbInput fullWidth id="inputCourierDate" placeholder="Courier Date">
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label for="inputReceptDate" class="label">Doc Recept Date</label>
+                        <input type="text" nbInput fullWidth id="inputReceptDate" placeholder="Recept Date">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label for="inputShipFrom" class="label">Ship From</label>
+                        <input type="text" nbInput fullWidth id="inputShipFrom" placeholder="Ship From">
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label for="inputPackage" class="label">Package</label>
+                        <input type="text" nbInput fullWidth id="inputPackage" placeholder="Package">
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="inputRemark" class="label">Remark</label>
+                        <input type="text" nbInput fullWidth id="inputRemark" placeholder="Remark">
+                    </div>
+                </div>
+            </div>
+        </nb-card-body>
+        <nb-card-footer>
+            <button type="submit" nbButton>Submit</button>
+            <button nbButton (click)="ref.close()">Close Dialog</button>
+        </nb-card-footer>
+    </nb-card>
+</ng-template>

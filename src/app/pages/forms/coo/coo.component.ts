@@ -12,11 +12,14 @@ import { UploadService } from 'app/@core/service/upload-file.service';
   styleUrls: ['./coo.component.scss'],
 })
 export class COOComponent implements OnInit {
-  // Send from caller
+  // Receive value
   listSelectedDN: DNModel[];
   shipFrom: string;
   cooNo: string;
   packageNo: string;
+  type: string;
+
+
   constructor(public windowRef: NbWindowRef,
     private uploadService: UploadService,
     private exportCOO: COOExportService,

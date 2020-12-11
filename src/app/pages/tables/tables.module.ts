@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { NbActionsModule, NbButtonModule, NbCardModule, NbIconModule, NbInputModule,
+import { NbActionsModule, NbButtonModule, NbCardModule, NbDatepicker, NbDatepickerModule, NbIconModule, NbInputModule,
 NbTabsetModule, NbTreeGridModule, NbWindowModule } from '@nebular/theme';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 
@@ -32,6 +32,7 @@ import { DNMComponent } from './dn/dnm.component';
     DataTablesModule,
     ModalOverlaysModule,
     FormsModule,
+    NbDatepickerModule,
     NbButtonModule,
     NbActionsModule,
   ],
