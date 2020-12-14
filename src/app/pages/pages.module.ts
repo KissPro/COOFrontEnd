@@ -11,6 +11,7 @@ import { DataTablesModule } from 'angular-datatables';
 import { BoomEcusService } from 'app/@core/service/boom-ecus.service';
 import { DNService } from 'app/@core/service/dn.service';
 import { CountryShipService } from 'app/@core/service/country-ship.service';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
@@ -21,6 +22,8 @@ import { CountryShipService } from 'app/@core/service/country-ship.service';
     MiscellaneousModule,
     DataTablesModule,
     NbDatepickerModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
   declarations: [
     PagesComponent,

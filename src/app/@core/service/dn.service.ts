@@ -9,7 +9,6 @@ import { DataTablesResponse } from '../models/datatables';
 @Injectable()
 export class DNService extends DNData {
 
-
     readonly dnURL = environment.apiUrl + '/api/dn/';
 
     constructor(private http: HttpClient) {
@@ -23,6 +22,13 @@ export class DNService extends DNData {
         return this.http.post<DataTablesResponse>(this.dnURL + 'list-manual/' + type,
             dtParameter).pipe(catchError(this.handleError));
     }
+    updateManual(ds: DNManualModel) {
+        return this.http.post(this.dnURL + 'update-manual', ds).pipe(catchError(this.handleError));
+    }
+    removeManual(ds: DNManualModel) {
+        return this.http.post(this.dnURL + 'remove-manual', ds).pipe(catchError(this.handleError));
+    }
+
     getListDNCOO(cooNo: string): Observable<DNModel[]> {
         return this.http.get<DNModel[]>(this.dnURL + 'open-coo/' + cooNo).pipe(catchError(this.handleError));
     }
@@ -33,6 +39,18 @@ export class DNService extends DNData {
         return this.http.get(this.dnURL + 'download-manual/' + type, {responseType: 'blob'});
     }
     handleError(error: HttpErrorResponse) {
-        return throwError(error);
+        // return throwError(error);
+        let errorMessage = '';
+        if (error.error instanceof ErrorEvent) {
+            // client-side error
+            alert(`Client error, Kindly contact IT!`);
+            errorMessage = `Error: ${error.error.message}`;
+        } else {
+            // server-side error
+            alert(`Server error, Kindly contact IT!`);
+            errorMessage = `Error Status: ${error.status}\nMessage: ${error.message}`;
+        }
+        console.log(errorMessage);
+        return throwError(errorMessage);
     }
 }

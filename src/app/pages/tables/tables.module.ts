@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
-import { NbActionsModule, NbButtonModule, NbCardModule, NbDatepicker, NbDatepickerModule, NbIconModule, NbInputModule,
+import { NbActionsModule, NbButtonModule, NbCardModule,
+  NbDatepickerModule, NbIconModule, NbInputModule,
 NbTabsetModule, NbTreeGridModule, NbWindowModule } from '@nebular/theme';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 
@@ -15,8 +16,9 @@ import { GuidService } from 'app/@core/service/guid.service';
 import { ModalOverlaysModule } from '../modal-overlays/modal-overlays.module';
 import { PlantService } from 'app/@core/service/plant.service';
 import { ConfigService } from 'app/@core/service/config.service';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DNMComponent } from './dn/dnm.component';
+
 
 @NgModule({
   imports: [
@@ -35,6 +37,7 @@ import { DNMComponent } from './dn/dnm.component';
     NbDatepickerModule,
     NbButtonModule,
     NbActionsModule,
+    ReactiveFormsModule,
   ],
   declarations: [
     ...routedComponents,

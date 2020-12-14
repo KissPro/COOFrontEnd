@@ -26,6 +26,8 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BasicAuthInterceptor } from './@core/helper/basic-auth.interceptor';
 import { ErrorInterceptor } from './@core/helper/error.interceptor';
 import { AuthenticationService } from './@core/service/authentication.service';
+import { NbDateFnsDateModule } from '@nebular/date-fns';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [AppComponent],
@@ -37,11 +39,18 @@ import { AuthenticationService } from './@core/service/authentication.service';
     AppRoutingModule,
     NbSidebarModule.forRoot(),
     NbMenuModule.forRoot(),
-    NbDatepickerModule.forRoot(),
     NbDialogModule.forRoot(),
     NbWindowModule.forRoot(),
     NbToastrModule.forRoot(),
-    // NbDateFnsDateModule.forRoot({ format: 'dd.MM.yyyy' }),
+    ReactiveFormsModule,
+
+    // Format date
+    NbDateFnsDateModule.forRoot({
+      parseOptions: { useAdditionalWeekYearTokens: true, useAdditionalDayOfYearTokens: true },
+      formatOptions: { useAdditionalWeekYearTokens: true, useAdditionalDayOfYearTokens: true },
+    }),
+    NbDateFnsDateModule.forChild({ format: 'dd.MM.yyyy' }),
+
     NbDatepickerModule.forRoot(),
     NbChatModule.forRoot({
       messageGoogleMapKey: 'AIzaSyA_wNuCzia92MAmdLRzmqitRGvCF7wCZPY',

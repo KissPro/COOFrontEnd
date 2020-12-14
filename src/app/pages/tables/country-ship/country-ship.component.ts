@@ -6,9 +6,10 @@ import { DefaultEditor, LocalDataSource, ServerDataSource } from 'ng2-smart-tabl
 import { AuthenticationService } from 'app/@core/service/authentication.service';
 import { GuidService } from 'app/@core/service/guid.service';
 import { formatDate } from '@angular/common';
-import { NbDialogService, NbToastrService} from '@nebular/theme';
+import { NbDialogService, NbToastrService } from '@nebular/theme';
 import { ToastrComponent } from 'app/pages/modal-overlays/toastr/toastr.component';
 import { DialogConfirmComponent } from 'app/pages/modal-overlays/dialog/dialog-confirm/dialog-confirm.component';
+import { DialogUploadFileComponent } from 'app/pages/modal-overlays/dialog/dialog-upload-file/dialog-upload-file.component';
 
 @Component({
   selector: 'ngx-country-ship',
@@ -88,10 +89,14 @@ export class CountryShipComponent {
     private dialogService: NbDialogService,
     private toastrService: NbToastrService) {
     this.source = new LocalDataSource();
+    this.LoadTable();
+  }
+
+  LoadTable() {
     this.serviceCountry.getAllCountryShip()
-      .subscribe(result => {
-        this.source.load(result);
-      });
+    .subscribe(result => {
+      this.source.load(result);
+    });
   }
 
   onCreateConfirm(event): void {
@@ -177,6 +182,17 @@ export class CountryShipComponent {
           event.confirm.reject();
         }
       });
+  }
+
+  // upload file
+  uploadFile(): void {
+    this.dialogService.open(DialogUploadFileComponent, {
+      context: {
+        type: 'CountryShip',
+        fileName: 'CountryShip_Template.xlsx',
+        urlUpload: '/api/country/import-excel',
+      },
+    }).onClose.subscribe(result => (result === 'success') ? this.LoadTable() : null);
   }
 }
 

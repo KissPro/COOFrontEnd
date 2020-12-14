@@ -65,13 +65,14 @@
                         <input class="mr-auto shipFrom" [(ngModel)]="shipFrom" required type="text" nbInput
                             placeholder="Input Ship Form">
                         <input type="text" nbInput [(ngModel)]="packageNo" placeholder="Input Package Number" required>
-                        <input type="text" class="ml-2" nbInput 
-                            [disabled]="type !== 'add'"
-                            [(ngModel)]="cooNo" placeholder="Input COO Number"
-                            required>
+                        <input type="text" class="ml-2" nbInput [disabled]="type !== 'add'" [(ngModel)]="cooNo"
+                            placeholder="Input COO Number" required>
                         <button class="ml-2" type="submit" (click)="onSubmit()" nbButton
-                            status="primary">{{type === 'add' ? 'Submit' : 'Update'}} </button>
-                        <button class="ml-2" nbButton (click)="onExport()" outline status="success">Export</button>
+                            [disabled]="checkValidInput() === false" status="primary">{{type === 'add' ? 'Submit' :
+                            'Update'}} </button>
+                        <button class="ml-2" nbButton (click)="onExport()" 
+                            [disabled]="checkValidInput() === false"
+                            outline status="success">Export</button>
                     </div>
                 </nb-card-body>
             </nb-card>

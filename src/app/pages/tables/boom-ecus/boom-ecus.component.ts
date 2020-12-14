@@ -6,6 +6,7 @@ import { BoomEcusModel } from 'app/@core/models/boom-ecus';
 import { BoomEcusService } from 'app/@core/service/boom-ecus.service';
 import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
+import { UploadService } from 'app/@core/service/upload-file.service';
 
 
 
@@ -24,6 +25,7 @@ export class BoomEcusComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(private http: HttpClient,
     private boomEcusService: BoomEcusService,
+    private uploadService: UploadService,
     private sidebarService: NbSidebarService,
     private layoutService: LayoutService) { }
 
@@ -61,9 +63,6 @@ export class BoomEcusComponent implements OnInit, AfterViewInit, OnDestroy {
         { data: 'maHS' }, { data: 'quantity' }, { data: 'donGiaHd' }, { data: 'country' },
         { data: 'soTk' }, { data: 'ngayDk' }, { data: 'altGroup' }, { data: 'sortString' },
       ],
-      columnDefs: [
-        { width: 300, targets: 5 },
-      ],
     };
   }
 
@@ -94,11 +93,19 @@ export class BoomEcusComponent implements OnInit, AfterViewInit, OnDestroy {
       this.currentRow = null;
   }
 
-  hideColumn() {
-    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      const column = dtInstance.column(1);
-      column.visible( ! column.visible() );
-    });
-    // this.rerender();
+  downloadBoomEcus() {
+    console.log(1);
+    this.boomEcusService.downloadBoomEcus()
+    .subscribe(
+      result => this.uploadService.ShowFile(result, 'Download_BoomEcus_' + new Date().toLocaleString()),
+    );
   }
+
+  // hideColumn() {
+  //   this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+  //     const column = dtInstance.column(1);
+  //     column.visible( ! column.visible() );
+  //   });
+  //   // this.rerender();
+  // }
 }

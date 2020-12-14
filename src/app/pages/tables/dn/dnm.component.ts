@@ -1,14 +1,25 @@
-import { AfterViewInit, Component, EventEmitter, OnChanges, OnDestroy,
-    OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import {
+    AfterViewInit, Component, EventEmitter, OnChanges, OnDestroy,
+    OnInit, Output, SimpleChanges, TemplateRef, ViewChild,
+} from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import {
+    FormControl, FormsModule, FormGroup,
+    FormBuilder, Validators,
+} from '@angular/forms'; // FormGroup have multiple FormControls
+import { format, compareAsc } from 'date-fns';
 import { DNManualModel, DNModel } from 'app/@core/models/dn';
 import { DNService } from 'app/@core/service/dn.service';
 import { Input } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
-import { NbDialogService } from '@nebular/theme';
+import { NbDialogService, NbToastrService } from '@nebular/theme';
 import { DialogUploadFileComponent } from 'app/pages/modal-overlays/dialog/dialog-upload-file/dialog-upload-file.component';
 import { UploadService } from 'app/@core/service/upload-file.service';
+import { nullSafeIsEquivalent } from '@angular/compiler/src/output/output_ast';
+import { AuthenticationService } from 'app/@core/service/authentication.service';
+import { GuidService } from 'app/@core/service/guid.service';
+import { ToastrComponent } from 'app/pages/modal-overlays/toastr/toastr.component';
 
 
 @Component({
@@ -35,9 +46,15 @@ export class DNMComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges
     selectedDN?: DNManualModel;
     listSelectDN: DNManualModel[] = [];
 
+    alert = new ToastrComponent(this.toastrService);
+
     constructor(
         private dnService: DNService,
+        private formBuilder: FormBuilder,
         private uploadService: UploadService,
+        private authen: AuthenticationService,
+        private toastrService: NbToastrService,
+        private guidService: GuidService,
         private dialogService: NbDialogService,
     ) { }
 
@@ -117,8 +134,18 @@ export class DNMComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges
 
     downloadManual() {
         this.dnService.DownloadManual(this.type)
-        .subscribe(
-          result => this.uploadService.ShowFile(result, 'Download_DN_Manual_' + new Date().toLocaleString()),
+            .subscribe(
+                result => this.uploadService.ShowFile(result, 'Download_DN_Manual_' + new Date().toLocaleString()),
+            );
+    }
+
+    removeManual() {
+        this.dnService.removeManual(this.selectedDN)
+            .subscribe(result => {
+                console.log(result);
+                this.alert.showToast('success', 'Success', 'Remove DN manual successfully!');
+                this.reloadCOOTable();
+            }
         );
     }
 
@@ -137,9 +164,85 @@ export class DNMComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges
 
     openEdit(event, i, dn: DNManualModel, dialog: TemplateRef<any>) {
         this.selectedDN = dn;
+        this.loadFormEdit();
         this.dialogService.open(
             dialog,
             { context: 'this is some additional data passed to dialog' });
+    }
+
+    // Form Angular Reative
+    // Init form
+    cooFormGroup: FormGroup = this.formBuilder.group({
+        trackingNo: ['', [Validators.minLength(3)]],
+        trackingDate: '',
+        courierDate: '',
+        receiptDate: '',
+        returnDate: '',
+        returnTime: '',
+        cooform: '',
+        shipFrom: ['', [Validators.required]],
+        package: ['', [Validators.required]],
+        remark: '',
+    });
+
+
+    loadFormEdit() {
+        // set value form init
+        this.cooFormGroup.patchValue({
+            trackingNo: this.selectedDN.trackingNo,
+            trackingDate: (this.selectedDN.trackingDate !== null) ? new Date(this.selectedDN.trackingDate) : null,
+            courierDate: (this.selectedDN.courierDate !== null) ? new Date(this.selectedDN.courierDate) : null,
+            receiptDate: (this.selectedDN.receiptDate !== null) ? new Date(this.selectedDN.receiptDate) : null,
+            returnDate: (this.selectedDN.returnDate !== null) ? new Date(this.selectedDN.returnDate) : null,
+            returnTime: (this.selectedDN.returnDate !== null) ? 
+                format(new Date(this.selectedDN.returnDate), 'HH:mm') : null,
+            cooform: this.selectedDN.cooform,
+            shipFrom: this.selectedDN.shipFrom,
+            package: this.selectedDN.package,
+            remark: this.selectedDN.remarkDs,
+        });
+    }
+
+    submitEdit(ref) {
+        console.log(this.cooFormGroup.value);
+        console.log(this.selectedDN);
+        // Create ds manual
+        // Validate return date
+        let error: string = null;
+        const returnDateTime = new Date(format(new Date(this.cooFormGroup.value.returnDate), 'yyyy/MM/dd') + ' '
+            + this.cooFormGroup.value.returnTime);
+
+        if (isNaN(returnDateTime.getDate()))
+            error = 'Please check return time format!'
+        if (error !== null) {
+            this.alert.showToast('danger', 'Error', error);
+            return;
+        }
+        const dsManual = {
+            'id': this.guidService.getGuid(),
+            'deliverySalesId': this.selectedDN.deliverySales.id,
+            'coono': this.selectedDN.coono,
+            'receiptDate': this.cooFormGroup.value.receiptDate,
+            'returnDate': this.cooFormGroup.value.returnDate,
+            'cooform': this.cooFormGroup.value.cooform,
+            'trackingNo': this.cooFormGroup.value.trackingNo,
+            'courierDate': this.cooFormGroup.value.courierDate,
+            'trackingDate': this.cooFormGroup.value.trackingDate,
+            'origin': 'VN',
+            'shipFrom': this.cooFormGroup.value.shipFrom,
+            'package': this.cooFormGroup.value.package,
+            'updatedBy': this.authen.userName(),
+            'updatedDate': new Date(),
+            'remarkDs': this.cooFormGroup.value.remark,
+            'deliverySales': this.selectedDN.deliverySales,
+        };
+        this.dnService.updateManual(dsManual)
+            .subscribe(result => {
+                this.alert.showToast('success', 'Success', 'Create country ship successfully!');
+                this.loadCOOTable();
+                this.reloadCOOTable();
+                ref.close();
+            });
     }
 
     openCOOCreated() {

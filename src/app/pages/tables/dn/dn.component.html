@@ -4,7 +4,7 @@
       <nb-tabset fullWidth>
         <nb-tab tabTitle="Incoming" tabIcon="bell-outline" responsive>
           <div class="row classButton d-flex justify-content-end">
-            <button class="mr-2" outline nbButton status="success" (click)="openCreateCOO()"
+            <button class="mr-2" outline nbButton status="warning" (click)="openCreateCOO()"
               [disabled]="listSelectDN.length === 0">
               <nb-icon icon="plus-outline"></nb-icon>COO&nbsp;&nbsp;
               <div class="badge badge-danger" *ngIf="listSelectDN.length > 0">{{listSelectDN.length}}</div>
@@ -58,7 +58,7 @@
                 <td>{{ dn.partyName}}</td>
                 <td>{{ dn.customerInvoiceNo }}</td>
                 <td>{{ dn.saleUnit }}</td>
-                <td>{{ dn.actualGidate | date: 'MM/dd/yyyy'}} </td>
+                <td>{{ dn.actualGidate | date: 'dd/MM/yyyy'}} </td>
                 <td>{{ dn.netValue }} </td>
                 <td>{{ dn.dnqty }} </td>
                 <td>{{ dn.netPrice }} </td>

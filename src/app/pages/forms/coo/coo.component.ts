@@ -1,10 +1,11 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { NbWindowRef } from '@nebular/theme';
+import { NbToastrService, NbWindowRef } from '@nebular/theme';
 import { COOExportModel } from 'app/@core/models/coo-export';
 import { DNModel } from 'app/@core/models/dn';
 import { COOExportService } from 'app/@core/service/coo-export.service';
 import { UploadService } from 'app/@core/service/upload-file.service';
+import { ToastrComponent } from 'app/pages/modal-overlays/toastr/toastr.component';
 
 @Component({
   selector: 'ngx-coo',
@@ -14,14 +15,18 @@ import { UploadService } from 'app/@core/service/upload-file.service';
 export class COOComponent implements OnInit {
   // Receive value
   listSelectedDN: DNModel[];
-  shipFrom: string;
-  cooNo: string;
-  packageNo: string;
+  shipFrom: string = null;
+  cooNo: string = null;
+  packageNo: string = null;
   type: string;
+
+  // Variable
+  alert = new ToastrComponent(this.toastrService);
 
 
   constructor(public windowRef: NbWindowRef,
     private uploadService: UploadService,
+    private toastrService: NbToastrService,
     private exportCOO: COOExportService,
   ) { }
 
@@ -41,12 +46,18 @@ export class COOComponent implements OnInit {
     );
   }
 
+
+  checkValidInput() {
+    if (this.shipFrom === '' || this.cooNo === '' || this.packageNo === ''
+      || this.shipFrom === undefined || this.cooNo === undefined || this.packageNo === undefined
+    )
+      return false;
+    else
+      return true;
+  }
   onSubmit() {
     // Get value - reload table
-    if (this.shipFrom === undefined || this.cooNo === undefined || this.packageNo === undefined) {
-      alert('Nhập input đế!');
-      return;
-    }
+
     const coo: COOExportModel = {
       dn: this.listSelectedDN,
       ship: this.shipFrom,
@@ -56,19 +67,17 @@ export class COOComponent implements OnInit {
     this.exportCOO.SaveCOO(coo)
       .subscribe(
         result => {
-          console.log('save coo success!');
+          this.alert.showToast('success', 'Success', 'Create COO successfully!');
           this.windowRef.close();
         },
-        (error: HttpErrorResponse) => { console.log('save coo error' + error); },
+        (error: HttpErrorResponse) => {
+          console.log('save coo error' + error);
+          this.alert.showToast('danger', 'Error', 'Create COO Error!');
+        },
       );
   }
 
   onExport() {
-    // check input required
-    if (this.shipFrom === undefined || this.cooNo === undefined || this.packageNo === undefined) {
-      alert('Nhập input đế!');
-      return;
-    }
     const coo: COOExportModel = {
       dn: this.listSelectedDN,
       ship: this.shipFrom,

@@ -169,18 +169,18 @@ export class DNComponent implements OnInit, AfterViewInit, OnDestroy {
     this.type = 'update';
     // set list dn
     this.dnService.getListDNCOO(this.cooNo)
-    .subscribe(result => {
-      console.log(result);
-      this.listSelectDN = result;
-      this.openCreateCOO();
-    });
+      .subscribe(result => {
+        console.log(result);
+        this.listSelectDN = result;
+        this.openCreateCOO();
+      });
   }
 
   downloadDN() {
     this.dnService.DownloadDN()
-    .subscribe(
-      result => this.uploadService.ShowFile(result, 'Download_DN_' + new Date().toLocaleString()),
-    );
+      .subscribe(
+        result => this.uploadService.ShowFile(result, 'Download_DN_' + new Date().toLocaleString()),
+      );
   }
 
   // Select DN to export COO
