@@ -4,6 +4,7 @@ import { concatMap, first, mergeMap, takeWhile } from 'rxjs/operators';
 import { AuthenticationService } from 'app/@core/service/authentication.service';
 import { UserService } from 'app/@core/service/user.service';
 import { NbThemeService } from '@nebular/theme';
+import { AdwebService } from 'app/@core/service/adweb.service';
 
 
 @Component({ templateUrl: 'success.component.html' })
@@ -13,8 +14,7 @@ export class SuccessComponent implements OnInit {
     alive: boolean;
     constructor(
         private activeRoute: ActivatedRoute,
-        private authenticationService: AuthenticationService,
-        private userService: UserService,
+        private adwebService: AdwebService,
         private router: Router,
     ) {
 
@@ -24,10 +24,9 @@ export class SuccessComponent implements OnInit {
             this.code = params['code'];
             console.log(this.code);
         });
-
-        this.authenticationService.getAccessToken(this.code)
+        this.adwebService.getAccessToken(this.code)
         .pipe(
-            concatMap(token => this.userService.getUser(token["access_token"])),
+            concatMap(token => this.adwebService.getUserInfor(token["access_token"])),
         )
         .subscribe(user => {
             console.log(user.employee["name"]);

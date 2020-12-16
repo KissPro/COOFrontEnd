@@ -14,7 +14,7 @@ import { SuccessComponent } from './pages/login/success.component';
 
 export const routes: Routes = [
   {
-    path: 'pages',  canActivate: [ AuthGuard ],
+    path: 'pages', canActivate: [AuthGuard],
     loadChildren: () => import('./pages/pages.module')
       .then(m => m.PagesModule),
   },
@@ -54,7 +54,8 @@ export const routes: Routes = [
     ],
   },
   { path: '', redirectTo: 'pages', pathMatch: 'full' },
-  { path: '**', redirectTo: 'pages' },
+  // { path: '**', redirectTo: '/api' }
+  // { path: '**', redirectTo: 'pages' },
 ];
 
 const config: ExtraOptions = {

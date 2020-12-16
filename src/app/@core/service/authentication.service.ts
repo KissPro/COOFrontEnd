@@ -8,6 +8,7 @@ import { environment } from 'environments/environment';
 import { Router } from '@angular/router';
 import { data, post } from 'jquery';
 import { Employee, EmployeeModel } from '../models/Employee';
+import { from } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
@@ -62,12 +63,21 @@ export class AuthenticationService {
         formData.append('code', code);
         formData.append('grant_type', 'authorization_code');
 
-
         return this.http.post<any>(this.rootURL, formData);
-        // .subscribe(data => {
-        //         token = data["access_token"];
-        //         return token;
-        // });
+
+        // return from(
+        //     fetch(
+        //         this.rootURL, // the url you are trying to access
+        //         {
+        //             body: formData,
+        //             headers: {
+        //                 'Content-Type': 'application/json',
+        //             },
+        //             method: 'POST', // GET, POST, PUT, DELETE
+        //             mode: 'no-cors' // the most important option
+        //         }
+        //     ));
+
     }
 
     // getUserInfor(token: string) {

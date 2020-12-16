@@ -36,6 +36,7 @@
             <th>SHIP&nbsp;FROM</th>
             <th>PACKAGE</th>
             <th>REMARK</th>
+            <th>UPDATED&nbsp;DATE</th>
         </tr>
     </thead>
     <tbody *ngIf="dns?.length != 0">
@@ -61,6 +62,7 @@
             <td>{{ dn.shipFrom }} </td>
             <td>{{ dn.package }} </td>
             <td>{{ dn.remarkDs}} </td>
+            <td>{{ dn.updatedDate | date: 'dd/MM/yyyy'}} </td>
         </tr>
     </tbody>
     <tbody *ngIf="dns?.length == 0">

@@ -101,7 +101,7 @@ export class DNMComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges
                 { data: 'returnDate' }, { data: 'cooform' }, { data: 'trackingNo' },
                 { data: 'trackingDate' }, { data: 'courierDate' },
                 { data: 'shipFrom' }, { data: 'package' },
-                { data: 'remarkDs' },
+                { data: 'remarkDs' }, { data: 'updatedDate' }, 
             ],
             columnDefs: [
                 { targets: 'no-sort', orderable: false },

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'environments/environment';
-import { Observable } from 'rxjs';
+import { from, Observable } from 'rxjs';
 import { Employee, EmployeeModel } from '../models/Employee';
 import { User } from '../data/users';
 
@@ -14,7 +14,7 @@ export class UserService {
         return this.http.get<User[]>(`${environment.apiUrl}/users`);
     }
 
-    getUser(token: string): Observable<EmployeeModel> {
+    getUser(token: string): Observable<any> {
         const reqHeader = new HttpHeaders({
             'Authorization': 'Bearer ' + token,
          });
