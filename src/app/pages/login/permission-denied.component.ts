@@ -4,8 +4,10 @@ import { first } from 'rxjs/operators';
 import { AuthenticationService } from 'app/@core/service/authentication.service';
 
 
-@Component({ templateUrl: 'login.component.html' })
-export class LoginComponent implements OnInit {
+@Component({ 
+    templateUrl: 'permission-denied.component.html',
+})
+export class PermissionDeniedComponent implements OnInit {
     loading = false;
     submitted = false;
     returnUrl: string;
@@ -19,6 +21,6 @@ export class LoginComponent implements OnInit {
 
     }
     ngOnInit() {
-        window.location.href = this.authenticationService.login();
+        // window.location.href = this.authenticationService.login();
     }
 }

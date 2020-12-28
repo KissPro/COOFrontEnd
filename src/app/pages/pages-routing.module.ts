@@ -65,7 +65,7 @@ const routes: Routes = [{
     },
     {
       path: '',
-      redirectTo: 'dashboard',
+      redirectTo: 'tables/boom-ecus',
       pathMatch: 'full',
     },
     {

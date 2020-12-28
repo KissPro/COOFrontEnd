@@ -6,6 +6,8 @@ import { LayoutService } from '../../../@core/utils';
 import { map, takeUntil } from 'rxjs/operators';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { Employee, EmployeeModel } from 'app/@core/models/Employee';
+import { filter } from 'rxjs/operators';
+import { AuthenticationService } from 'app/@core/service/authentication.service';
 
 @Component({
   selector: 'ngx-header',
@@ -19,13 +21,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
   user: any;
   userAd: string;
 
-  userMenu = [ { title: 'Profile' }, { title: 'Log out' } ];
+  userMenus = [{ title: 'Profile' }, { title: 'Log out' }];
 
   constructor(private sidebarService: NbSidebarService,
-              private menuService: NbMenuService,
-              private userService: UserData,
-              private layoutService: LayoutService,
-              private breakpointService: NbMediaBreakpointsService) {
+    private menuService: NbMenuService,
+    private userService: UserData,
+    private layoutService: LayoutService,
+    private authenService: AuthenticationService,
+    private breakpointService: NbMediaBreakpointsService) {
+  }
+
+  clickMenu(event) {
+    console.log(event);
   }
 
   ngOnInit() {
@@ -34,7 +41,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.userService.getUsers()
       .pipe(takeUntil(this.destroy$))
       .subscribe((users: any) => {
-        this.user = users.nick
+        this.user = (this.userAd !== 'Hoang Ngo Van') ? users.adweb : users.hoang;
+      });
+
+    // Log out
+    this.menuService.onItemClick()
+      .subscribe(title => {
+        if (title.item.title === 'Log out') this.authenService.logout();
       });
 
     const { xl } = this.breakpointService.getBreakpointsMap();
@@ -44,7 +57,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
-
 
   toggleSidebar(): boolean {
     this.sidebarService.toggle(true, 'menu-sidebar');

@@ -12,6 +12,11 @@ export interface Employee {
     departmentName: string;
 }
 
+export interface EmployeeRole {
+    listRole: string[];
+    token: string;
+}
+
 export interface EmployeeModel {
    employee: Employee[];
 }

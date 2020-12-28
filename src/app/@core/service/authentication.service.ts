@@ -12,30 +12,25 @@ import { from } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
-    private userSubject: BehaviorSubject<Employee>;
-    public user: Observable<Employee>;
-    public login_uri: string;
+    private userSubject: BehaviorSubject<EmployeeModel>;
+    public user: Observable<EmployeeModel>;
+    public login_uri: string = `${environment.ADWeb_URI}/adweb/oauth2/authorization/v1?scope=read&redirect_uri=${environment.CLIENT_REDIRECT_URL}&response_type=code&client_id=${environment.CLIENT_ID}&state=online`;
+    public logout_uri: string = `${environment.ADWeb_URI}/web/session/logout?redirect=${environment.CLIENT_REDIRECT_URL}`;
+    public loginStatus: boolean = true;
 
     constructor(
         private router: Router,
         private http: HttpClient,
     ) {
-        this.userSubject = new BehaviorSubject<Employee>(JSON.parse(localStorage.getItem('user')));
+        this.userSubject = new BehaviorSubject<EmployeeModel>(JSON.parse(localStorage.getItem('user')));
         this.user = this.userSubject.asObservable();
     }
 
-    public get userValue(): Employee {
+    public get userValue(): EmployeeModel {
         return this.userSubject.value;
     }
 
-    login() {
-        return this.login_uri;
-    }
-
-    success() {
-        // tslint:disable-next-line: no-console
-        console.log('this is hoang');
-    }
+    // Get user infor
     userId() {
         return (<EmployeeModel>JSON.parse(localStorage.getItem('user'))).employee["employee_id"];
     }
@@ -45,59 +40,16 @@ export class AuthenticationService {
 
     logout() {
         // remove user from local storage to log user out
+        // localStorage.removeItem('user');
+        // localStorage.removeItem('user-role');
+        // localStorage.removeItem('authorize-token');
+
         localStorage.removeItem('user');
+        localStorage.removeItem('role');
         this.userSubject.next(null);
-        this.router.navigate(['/auth/login']);
+
+        // redirect logout session adweb
+        window.location.href = this.logout_uri;
     }
-    readonly rootURL = `${environment.ADWeb_URI}/adweb/oauth2/access_token/v1`;
-    readonly userURL = `${environment.ADWeb_URI}/adweb/people/me/v1`;
-
-    getAccessToken(code: string) {
-        let token;
-        var formData: any = new FormData();
-
-        formData.append('client_id', environment.CLIENT_ID);
-        formData.append('redirect_uri', environment.CLIENT_REDIRECT_URL);
-        formData.append('client_secret', environment.CLIENT_SECRET);
-        formData.append('code', code);
-        formData.append('grant_type', 'authorization_code');
-
-        return this.http.post<any>(this.rootURL, formData);
-
-        // return from(
-        //     fetch(
-        //         this.rootURL, // the url you are trying to access
-        //         {
-        //             body: formData,
-        //             headers: {
-        //                 'Content-Type': 'application/json',
-        //             },
-        //             method: 'POST', // GET, POST, PUT, DELETE
-        //             mode: 'no-cors' // the most important option
-        //         }
-        //     ));
-
-    }
-
-    // getUserInfor(token: string) {
-    //     const headers = new HttpHeaders({
-    //         'Content-Type': 'application/json',
-    //         'Authorization': `Bearer ${token}`,
-    //       })
-    //     this.http.get<any>(this.userURL, { headers })
-    //     .subscribe(data =>{
-    //         this.user = data;
-    //     });
-    //     console.log(this.user);
-    // }
-
-
-
-    // getAccessGet(code: string) {
-    //     this.http.get<any>('http://localhost:5001/api/adweb/access?code=' + code)
-    //     .subscribe(data =>{
-    //         console.log(data[0].access_token);
-    //         console.log(data[0]);
-    //     })
-    // }
+    
 }

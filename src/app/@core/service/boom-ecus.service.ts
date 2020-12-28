@@ -16,24 +16,9 @@ export class BoomEcusService extends BoomEcusData {
     }
 
     getBoomEcus(dtParameter: any): Observable<DataTablesResponse> {
-        return this.http.post<DataTablesResponse>(this.ecusBoomURL + 'all-list', dtParameter).pipe(catchError(this.handleError));
+        return this.http.post<DataTablesResponse>(this.ecusBoomURL + 'all-list', dtParameter);
     }
     downloadBoomEcus() {
-        return this.http.get(this.ecusBoomURL + 'download', { responseType: 'blob' }).pipe(catchError(this.handleError));
-    }
-    handleError(error: HttpErrorResponse) {
-        // return throwError(error);
-        let errorMessage = '';
-        if (error.error instanceof ErrorEvent) {
-            // client-side error
-            alert(`Client error, Kindly contact IT!`);
-            errorMessage = `Error: ${error.error.message}`;
-        } else {
-            // server-side error
-            alert(`Server error, Kindly contact IT!`);
-            errorMessage = `Error Status: ${error.status}\nMessage: ${error.message}`;
-        }
-        console.log(errorMessage);
-        return throwError(errorMessage);
+        return this.http.get(this.ecusBoomURL + 'download', { responseType: 'blob' });
     }
 }

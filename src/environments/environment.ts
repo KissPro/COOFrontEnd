@@ -11,6 +11,7 @@
 export const environment = {
   production: false,
   apiUrl: 'http://localhost:5001',
+  // apiUrl: 'http://coo-dev.fushan.fihnbb.com/api',
   // apiUrl: 'http://coo-dev.fushan.fihnbb.com',
   ADWeb_URI: 'http://idmgt.fushan.fihnbb.com',
   CLIENT_ID: 'iFFnnowtaBIY1VuODou5osotxFMducIU',

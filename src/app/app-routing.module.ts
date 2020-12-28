@@ -8,9 +8,9 @@ import {
   NbRequestPasswordComponent,
   NbResetPasswordComponent,
 } from '@nebular/auth';
-import { LoginComponent } from './pages/login/login.component';
 import { AuthGuard } from './@core/helper/auth.guard';
 import { SuccessComponent } from './pages/login/success.component';
+import { PermissionDeniedComponent } from './pages/login/permission-denied.component';
 
 export const routes: Routes = [
   {
@@ -27,10 +27,6 @@ export const routes: Routes = [
         component: NbLoginComponent,
       },
       {
-        path: 'login',
-        component: LoginComponent,
-      },
-      {
         path: 'logout',
         component: NbLogoutComponent,
       },
@@ -43,6 +39,10 @@ export const routes: Routes = [
         component: NbResetPasswordComponent,
       },
     ],
+  },
+  {
+    path: 'permission-denied',
+    component: PermissionDeniedComponent,
   },
   {
     path: 'Login',

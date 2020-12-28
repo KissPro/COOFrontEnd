@@ -5,33 +5,60 @@ import { AuthenticationService } from 'app/@core/service/authentication.service'
 import { UserService } from 'app/@core/service/user.service';
 import { NbThemeService } from '@nebular/theme';
 import { AdwebService } from 'app/@core/service/adweb.service';
+import { AuthorizationService } from 'app/@core/service/authorization.service.';
+import { EmployeeModel, EmployeeRole } from 'app/@core/models/Employee';
+import { EmptyError } from 'rxjs';
 
 
 @Component({ templateUrl: 'success.component.html' })
 export class SuccessComponent implements OnInit {
     code: string;
-    token: string;
+    token: any;
     alive: boolean;
     constructor(
         private activeRoute: ActivatedRoute,
         private adwebService: AdwebService,
+        private authoService: AuthorizationService,
+        private authenService: AuthenticationService,
         private router: Router,
     ) {
-
     }
     ngOnInit() {
         this.activeRoute.queryParams.subscribe(params => {
             this.code = params['code'];
             console.log(this.code);
-        });
-        this.adwebService.getAccessToken(this.code)
-        .pipe(
-            concatMap(token => this.adwebService.getUserInfor(token["access_token"])),
-        )
-        .subscribe(user => {
-            console.log(user.employee["name"]);
-            localStorage.setItem('user', JSON.stringify(user));
-            this.router.navigate(['/']);
+            if (this.code != undefined) {
+                this.adwebService.getAccessToken(this.code)
+                    .pipe(
+                        concatMap(token => {
+                            this.token = token;
+                            return this.adwebService.getUserInfor(token["access_token"]);
+                        }),
+                    )
+                    .subscribe(user => {
+                        localStorage.setItem('user', JSON.stringify(user));
+                        // Get list user roles
+                        this.adwebService.getUserRoleByID(this.token["access_token"], user.employee["employee_id"])
+                            .subscribe(roles => {
+                                // set user authorize base role
+                                this.authoService.getToken(roles)
+                                    .subscribe(token => {
+                                        // Set role
+                                        var role: EmployeeRole = {
+                                            listRole: roles,
+                                            token: token
+                                        }
+                                        // localStorage.setItem('authorize-token', JSON.stringify(token));
+                                        localStorage.setItem('role', JSON.stringify(role));
+                                        this.router.navigate(['/']);
+                                    });
+                            });
+                    });
+            }
+            // When logout
+            else {
+                this.router.navigate(['/']);
+            }
         });
     }
 }
