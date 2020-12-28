@@ -29,7 +29,6 @@ export class AuthenticationService {
     }
 
     login() {
-        this.login_uri = `${environment.ADWeb_URI}/adweb/oauth2/authorization/v1?scope=read&redirect_uri=${environment.CLIENT_REDIRECT_URL}&response_type=code&client_id=${environment.CLIENT_ID}&state=online`;
         return this.login_uri;
     }
 
