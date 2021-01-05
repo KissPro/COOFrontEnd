@@ -23,7 +23,7 @@ export class ToastrComponent {
   duration = 2000;
   hasIcon = true;
   position: NbGlobalPosition = NbGlobalPhysicalPosition.TOP_RIGHT;
-  preventDuplicates = false;
+  preventDuplicates = true;
   status: NbComponentStatus = 'primary';
 
   title = 'HI there!';

@@ -21,13 +21,12 @@ export class ErrorInterceptor implements HttpInterceptor {
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(request).pipe(catchError(err => {
             if (err.status === 401) {
-                // auto logout if 401 response returned from api
-                console.log('logggout from api');
-                // this.authenticationService.logout();
+                if (this.tokenExpired()) {
+                    this.authenticationService.logout();
+                }
             }
             if (err.status === 403) {
                 this.router.navigate(['/permission-denied']);
-                // this.alert.showToast('warning', '403 Permission denied', 'Sorry, You do not have permission!');
             }
             else {
                 if (err.error instanceof ErrorEvent) {
@@ -37,12 +36,16 @@ export class ErrorInterceptor implements HttpInterceptor {
                 } else {
                     // server-side error
                     this.alert.showToast('danger', 'Error Server', 'Kindly contact IT team!');
-
                 }
             }
             const error = err.error.message || err.statusText;
             console.log(error);
             return throwError(error);
         }));
+    }
+    // Check token expired
+    private tokenExpired() {
+        const expiry = JSON.parse(localStorage.getItem('role')).token.expiration;
+        return new Date >= new Date(expiry);
     }
 }

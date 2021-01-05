@@ -1,14 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { concatMap, first, mergeMap, takeWhile } from 'rxjs/operators';
+import { concatMap } from 'rxjs/operators';
 import { AuthenticationService } from 'app/@core/service/authentication.service';
-import { UserService } from 'app/@core/service/user.service';
-import { NbThemeService } from '@nebular/theme';
 import { AdwebService } from 'app/@core/service/adweb.service';
 import { AuthorizationService } from 'app/@core/service/authorization.service.';
-import { EmployeeModel, EmployeeRole } from 'app/@core/models/Employee';
-import { EmptyError } from 'rxjs';
-
+import { EmployeeRole } from 'app/@core/models/Employee';
 
 @Component({ templateUrl: 'success.component.html' })
 export class SuccessComponent implements OnInit {
@@ -19,7 +15,6 @@ export class SuccessComponent implements OnInit {
         private activeRoute: ActivatedRoute,
         private adwebService: AdwebService,
         private authoService: AuthorizationService,
-        private authenService: AuthenticationService,
         private router: Router,
     ) {
     }
