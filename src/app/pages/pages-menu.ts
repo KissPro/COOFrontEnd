@@ -7,7 +7,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
   //   link: '/pages/dashboard',
   // },
   {
-    title: 'Boom - Ecus',
+    title: 'ANNEX 5 BOM of circular 05/2018/TT-BCT',
     icon: 'layers-outline',
     link: '/pages/tables/boom-ecus',
   },
